@@ -29,4 +29,8 @@ pip install pyobjc --user
 # Install VQA
 - `pip install tensorflow==1.0.0`
 - Install TensorFlow Fold 0.0.1
-- 
+
+# Sharing a image of website to a Robot
+- Run in a folder you wont to host `python -m SimpleHTTPServer`
+- Open a website at `<remote_computer_IP>:8000/<page_like_index.html>`
+

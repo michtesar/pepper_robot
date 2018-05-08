@@ -196,7 +196,7 @@ class Pepper:
 
         self.slam_map = img
 
-    def show_map(self):
+    def show_map(self, on_robot=False, remote_ip=None):
         result_map = self.navigation_service.getMetricalMap()
         map_width = result_map[1]
         map_height = result_map[2]
@@ -222,9 +222,14 @@ class Pepper:
         robot_map = cv2.resize(img, None, fx=1, fy=1, interpolation=cv2.INTER_CUBIC)
 
         print("[INFO]: Showing the map")
-        cv2.imshow('RobotMap', robot_map)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+
+        if on_robot:
+            cv2.imwrite("./tmp/map.png", robot_map)
+            self.tablet_show_web(remote_ip + ":8000/map.png")
+        else:
+            cv2.imshow("RobotMap", robot_map)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
 
     def robot_localization(self):
         try:

@@ -18,6 +18,7 @@ import cv2
 import speech_recognition
 import gtts
 import playsound
+import subprocess
 
 
 class Pepper:
@@ -411,6 +412,10 @@ class Pepper:
         self.unsubscribe_effector()
         self.stand()
         self.face_detection_service.unsubscribe(proxy_name)
+
+    def share_localhost(self, folder):
+        subprocess.Popen(["cd", folder])
+        subprocess.Popen(["python", "-m", "SimpleHTTPServer"])
 
 
 class VirtualPepper:

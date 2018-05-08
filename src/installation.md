@@ -24,3 +24,9 @@ pip install pyobjc --user
 - Add `~/pynaoqi/lib/python2.7/site-packages` and `~/pynaoqi/lib` path to `.bash_profile`
 - Open PyCharm and add `site-packages` to libraries (in interpreter of project options)
 - Open `Edit configuration...` and add `lib` to `Enviroment variables`
+
+
+# Install VQA
+- `pip install tensorflow==1.0.0`
+- Install TensorFlow Fold 0.0.1
+- 

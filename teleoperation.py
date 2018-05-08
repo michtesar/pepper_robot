@@ -4,7 +4,7 @@ import cv2
 pepper = Pepper("paprika.local")
 pepper.set_security_distance(0.5)
 
-image = cv2.imread("keyboard.png")
+image = cv2.imread("src/keyboard.png")
 height, width = image.shape[:2]
 
 cv2.namedWindow("Robot teleoperation", cv2.WINDOW_GUI_NORMAL)

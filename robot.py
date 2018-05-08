@@ -253,7 +253,6 @@ class Pepper:
 
     def battery_status(self):
         """Say a battery status"""
-        # TODO: Is it in percentage?
         battery = self.battery_service.getBatteryCharge()
         self.say("I have " + str(battery) + " percent of battery")
 

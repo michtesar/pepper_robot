@@ -14,7 +14,6 @@ Plymouth, United Kingdom 2018
 import qi
 import time
 import numpy
-import naoqi
 import cv2
 import speech_recognition
 import gtts
@@ -166,8 +165,7 @@ class Pepper:
             self.say("Stopping to track a " + object_name)
 
         self.tracker_service.stopTracker()
-        self.tracker_service.unregisterAllTargets()
-        self.tracker_service.setEffector("None")
+        self.unsubscribe_effector()
         self.say("Let's do something else!")
 
     def exploration_mode(self, radius):
@@ -367,19 +365,46 @@ class Pepper:
         except:
             self.say("I cannot move in that direction")
 
+    def unsubscribe_effector(self):
+        self.tracker_service.unregisterAllTargets()
+        self.tracker_service.setEffector("None")
+
     def pick_a_volunteer(self):
+        volunteer_found = False
+        self.unsubscribe_effector()
+        self.stand()
+        self.say("I need a volunteer.")
+
         proxy_name = "FaceDetection" + str(numpy.random)
-        self.face_detection_service.subscribe(proxy_name, 500, 0.0)
 
-        for memory in range(20):
-            time.sleep(0.5)
-            output = self.memory_service.getData("FaceDetected")
-            print("...")
+        while not volunteer_found:
+            wait = numpy.random.randint(500, 1500) / 1000
+            theta = numpy.random.randint(-5, 5)
+            self.turn_around(theta)
+            time.sleep(wait)
+            self.stop_moving()
+            self.stand()
+            self.face_detection_service.subscribe(proxy_name, 500, 0.0)
 
-            if output and isinstance(output, list) and len(output) >= 2:
-                print("Face detected")
-                self.say("I found a face!")
+            for memory in range(2):
+                time.sleep(0.5)
+                output = self.memory_service.getData("FaceDetected")
+                print("...")
+                if output and isinstance(output, list) and len(output) >= 2:
+                    print("Face detected")
+                    volunteer_found = True
 
+        self.say("I found a volunteer! It is you!")
+        self.stand()
+        self.tracker_service.registerTarget("Face", 0.15)
+        self.tracker_service.setMode("Move")
+        self.tracker_service.track("Face")
+        self.tracker_service.setEffector("RArm")
+
+        time.sleep(2)
+
+        self.unsubscribe_effector()
+        self.stand()
         self.face_detection_service.unsubscribe(proxy_name)
 
 

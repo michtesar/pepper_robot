@@ -53,6 +53,7 @@ class Pepper:
         self.camera_device = self.session.service("ALVideoDevice")
         self.face_detection_service = self.session.service("ALFaceDetection")
         self.memory_service = self.session.service("ALMemory")
+        self.audio_service = self.session.service("ALAudioPlayer")
 
         self.slam_map = None
         self.localization = None
@@ -416,6 +417,12 @@ class Pepper:
     def share_localhost(self, folder):
         subprocess.Popen(["cd", folder])
         subprocess.Popen(["python", "-m", "SimpleHTTPServer"])
+
+    def play_sound(self, sound):
+        self.audio_service.playFile(sound)
+
+    def stop_sound(self):
+        self.audio_service.stopAll()
 
 
 class VirtualPepper:

@@ -48,15 +48,13 @@ class Pepper:
         self.navigation_service = self.session.service("ALNavigation")
         self.battery_service = self.session.service("ALBattery")
         self.awareness_service = self.session.service("ALBasicAwareness")
-        self.camera_device = naoqi.ALProxy("ALVideoDevice", ip_address, port)
         self.led_service = self.session.service("ALLeds")
         self.audio_device = self.session.service("ALAudioDevice")
-        #self.camera_device = self.session.service("ALVideoDevice")
+        self.camera_device = self.session.service("ALVideoDevice")
 
         self.slam_map = None
         self.localization = None
-
-        self.camera_link = self.camera_device.subscribeCamera("CameraFrame", 0, 1, 13, 30)
+        self.camera_link = None
 
     def stand(self):
         """Get robot into default standing position"""
@@ -272,10 +270,11 @@ class Pepper:
         else:
             self.awareness_service.pauseAwareness()
 
-    def stream_camera(self, camera, resolution):
+    def subscribe_camera(self, camera, resolution, fps):
         """
-        Stream camera data from robot
+        Subscribe to a camera service
 
+        :param fps: 5, 10, 15 or 30
         :param camera: camera_top, camera_bottom
         :param resolution:
             0: 160x120
@@ -283,72 +282,33 @@ class Pepper:
             2: 640x480
             3: 1280x960
         """
-        fps = 30    # Set only 5 10, 15 or 30 FPS
-
         camera_index = None
         if camera == "camera_top":
             camera_index = 0
         elif camera == "camera_bottom":
             camera_index = 1
 
-        self.camera_link = self.camera_device.subscribeCamera("CameraStream", camera_index, resolution, 13, fps)
+        self.camera_link = self.camera_device.subscribeCamera("Camera_Stream00", camera_index, resolution, 13, fps)
+        pass
+
+    def unsubscribe_camera(self):
+        """Unsubscribe to camera"""
+        self.camera_device.unsubscribe(self.camera_link)
+
+    def get_camera_frame(self, show):
+        """
+        Get camera frame from subscribed camera link
+
+        :param show: Show image with OpenCV
+        :return: image (array)
+        """
         image_raw = self.camera_device.getImageRemote(self.camera_link)
+        image = numpy.frombuffer(image_raw[6], numpy.uint8).reshape(image_raw[1], image_raw[0], 3)
 
-        width = image_raw[1]
-        height = image_raw[0]
-        array = image_raw[6]
-
-        cv2.namedWindow("Pepper Camera")
-        while True:
-            image = numpy.fromstring(array, numpy.uint8).reshape(width, height, 3)
+        if show:
             cv2.imshow("Pepper Camera", image)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-            image_raw = self.camera_device.getImageRemote(self.camera_link)
-            array = image_raw[6]
-
-        self.camera_device.unsubscribe("CameraStream")
-
-        return image
-
-    def get_camera(self, camera, resolution):
-        """
-        Stream camera data from robot
-
-        :param camera: camera_top, camera_bottom
-        :param resolution:
-            0: 160x120
-            1: 320x240
-            2: 640x480
-            3: 1280x960
-        """
-        camera_index = None
-        if camera == "camera_top":
-            camera_index = 0
-        elif camera == "camera_bottom":
-            camera_index = 1
-
-        self.camera_link = self.camera_device.subscribeCamera("CameraShot", camera_index, resolution, 13, 30)
-        image_raw = self.camera_device.getImageRemote(self.camera_link)
-
-        width = image_raw[1]
-        height = image_raw[0]
-        array = image_raw[6]
-
-        cv2.namedWindow("Pepper Camera")
-
-        image = numpy.fromstring(array, numpy.uint8).reshape(width, height, 3)
-        cv2.imshow("Pepper Camera", image)
-        self.camera_device.unsubscribe("CameraShot")
-        cv2.waitKey(-1)
-        cv2.destroyAllWindows()
-
-        return image
-
-    def get_camera_frame(self):
-        self.camera_link = self.camera_device.subscribeCamera("CameraShot", 0, 0, 13, 30)
-        image_raw = self.camera_device.getImageRemote(self.camera_link)
-        image = numpy.fromstring(image_raw[6], numpy.uint8).reshape(image_raw[1], image_raw[0], 3)
+            cv2.waitKey(-1)
+            cv2.destroyAllWindows()
 
         return image
 

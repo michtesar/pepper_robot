@@ -18,17 +18,16 @@ while True:
 
     if k == 100:
         # Turn right
-        pepper.turn_around(-0.5)
+        pepper.turn_around(-2)
     elif k == 119:
         # Go forward
-        pepper.move_forward(0.5)
+        pepper.move_forward(2)
     elif k == 97:
         # Turn left
-        pepper.turn_around(1.0)
+        pepper.turn_around(2.0)
     elif k == 115:
         # Go back
-        pepper.move_forward(1.0)
+        pepper.move_forward(2.0)
     elif k == 32:
         # Stop moving
         pepper.stop_moving()
-

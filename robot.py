@@ -51,6 +51,7 @@ class Pepper:
         self.led_service = self.session.service("ALLeds")
         self.audio_device = self.session.service("ALAudioDevice")
         self.camera_device = self.session.service("ALVideoDevice")
+        self.face_detection_service = self.session.service("ALFaceDetection")
 
         self.slam_map = None
         self.localization = None
@@ -288,8 +289,8 @@ class Pepper:
         elif camera == "camera_bottom":
             camera_index = 1
 
-        self.camera_link = self.camera_device.subscribeCamera("Camera_Stream00", camera_index, resolution, 13, fps)
-        pass
+        self.camera_link = self.camera_device.subscribeCamera("Camera_Stream" + str(numpy.random),
+                                                              camera_index, resolution, 13, fps)
 
     def unsubscribe_camera(self):
         """Unsubscribe to camera"""

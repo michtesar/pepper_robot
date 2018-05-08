@@ -302,11 +302,10 @@ class Pepper:
         cv2.namedWindow("Pepper Camera")
         while True:
             image = numpy.fromstring(array, numpy.uint8).reshape(width, height, 3)
-            #image2 = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             cv2.imshow("Pepper Camera", image)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-            image_raw = self.camera_device.getImageRemote(camera_link)
+            image_raw = self.camera_device.getImageRemote(self.camera_link)
             array = image_raw[6]
 
         self.camera_device.unsubscribe("CameraStream")
@@ -340,7 +339,6 @@ class Pepper:
         cv2.namedWindow("Pepper Camera")
 
         image = numpy.fromstring(array, numpy.uint8).reshape(width, height, 3)
-        #image2 = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         cv2.imshow("Pepper Camera", image)
         self.camera_device.unsubscribe("CameraShot")
         cv2.waitKey(-1)
@@ -352,7 +350,6 @@ class Pepper:
         self.camera_link = self.camera_device.subscribeCamera("CameraShot", 0, 0, 13, 30)
         image_raw = self.camera_device.getImageRemote(self.camera_link)
         image = numpy.fromstring(image_raw[6], numpy.uint8).reshape(image_raw[1], image_raw[0], 3)
-        cv2.imwrite("./camera_image.png", image)
 
         return image
 

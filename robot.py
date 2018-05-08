@@ -52,6 +52,7 @@ class Pepper:
         self.audio_device = self.session.service("ALAudioDevice")
         self.camera_device = self.session.service("ALVideoDevice")
         self.face_detection_service = self.session.service("ALFaceDetection")
+        self.memory_service = self.session.service("ALMemory")
 
         self.slam_map = None
         self.localization = None
@@ -365,6 +366,21 @@ class Pepper:
             self.say("At your command")
         except:
             self.say("I cannot move in that direction")
+
+    def pick_a_volunteer(self):
+        proxy_name = "FaceDetection" + str(numpy.random)
+        self.face_detection_service.subscribe(proxy_name, 500, 0.0)
+
+        for memory in range(20):
+            time.sleep(0.5)
+            output = self.memory_service.getData("FaceDetected")
+            print("...")
+
+            if output and isinstance(output, list) and len(output) >= 2:
+                print("Face detected")
+                self.say("I found a face!")
+
+        self.face_detection_service.unsubscribe(proxy_name)
 
 
 class VirtualPepper:

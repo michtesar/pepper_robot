@@ -85,13 +85,27 @@ class Pepper:
 
         self.tracker_service.pointAt(effector_name, [x, y, z], frame, speed)
 
-    def move_forward(self, distance):
-        self.motion_service.move(distance, 0, 0)
+    def move_forward(self, speed):
+        """
+        Move forward with speed
 
-    def turn_around(self, theta):
-        self.motion_service.move(0, 0, theta)
+        :param speed: float
+        """
+        self.motion_service.move(speed, 0, 0)
+
+    def turn_around(self, speed):
+        """
+        Turn around the robot by speed
+
+        :param theta: float
+            negative values turns to left
+            positive values turns to right
+        :return:
+        """
+        self.motion_service.move(0, 0, speed)
 
     def stop_moving(self):
+        """Stop robot from moving by 'move_around' and 'turn_around' methods"""
         self.motion_service.stopMove()
 
     def say(self, text):

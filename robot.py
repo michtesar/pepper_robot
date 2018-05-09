@@ -81,7 +81,7 @@ class Pepper:
         :param z: z axis in meters
         :param effector_name: LArm, RArm or Arms
         """
-        speed = 0.5     # 50 %
+        speed = 0.5     # 50 % of speed
 
         self.tracker_service.pointAt(effector_name, [x, y, z], frame, speed)
 

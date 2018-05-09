@@ -77,6 +77,10 @@ class Pepper:
         """
         Point end-effector in cartesian space
 
+        :Example:
+
+        >>> pepper.point_at(1.0, 1.0, 0.0, "RArm", 0)
+
         :param x: X axis in meters
         :type x: float
         :param y: Y axis in meters
@@ -131,6 +135,10 @@ class Pepper:
         >>> pepper.share_localhost("/Users/user/Desktop/web_host/")
         >>> pepper.tablet_show_web("<remote_ip>:8000/web_host/index.html")
 
+        Or
+
+        >>> pepper.tablet_show_web("https://www.ciirc.cvut.cz")
+
         .. note:: Or you can simply run `python -m SimpleHTTPServer` in the root of \
         the web host and host it by self on specified port. Default is 8000.
 
@@ -146,6 +154,10 @@ class Pepper:
         Display image on robot tablet
 
         .. seealso:: For more take a look at `tablet_show_web()`
+
+        :Example:
+
+        >>> pepper.tablet_show_image("https://goo.gl/4Xq6Bc")
 
         :param image_url: Image URL (local or web)
         :type image_url: string
@@ -190,6 +202,14 @@ class Pepper:
 
         .. seealso:: For more info about tracking modes, object names and other:\
         http://doc.aldebaran.com/2-5/naoqi/trackers/index.html#tracking-modes
+
+        :Example:
+
+        >>> pepper.track_object("Face", "Arms")
+
+        Or
+
+        >>> pepper.track_object("RedBall", "LArm", diameter=0.1)
 
         :param object_name: `RedBall`, `Face`, `LandMark`, `LandMarks`, `People` or `Sound`
         :param effector_name: `LArm`, `RArm`, `Arms`
@@ -382,6 +402,12 @@ class Pepper:
         otherwise it will conflict it and you will not be able to \
         get any images due to return value None from stream.
 
+        :Example:
+
+        >>> pepper.subscribe_camera(0, 1, 15)
+        >>> image = pepper.get_camera_frame(False)
+        >>> pepper.unsubscribe_camera()
+
         :param camera: `camera_top` or `camera_bottom`
         :type camera: string
         :param resolution:
@@ -440,6 +466,10 @@ class Pepper:
         .. warning:: It is not wise to turn `security distance` off.\
         Robot may fall from stairs or bump into any fragile objects.
 
+        :Example:
+
+        >>> pepper.set_security_distance(0.01)
+
         :param distance: Distance from the objects in meters
         :type distance: float
         """
@@ -461,6 +491,10 @@ class Pepper:
     def move_to_circle(self, clockwise, t=10):
         """
         Move a robot into circle for specified time
+
+        .. note:: This example only count on time not finished circles.
+
+        >>> pepper.move_to_circle(clockwise=True, t=5)
 
         :param clockwise: Specifies a direction to turn around
         :type clockwise: bool
@@ -495,6 +529,13 @@ class Pepper:
         or load previously mapped enviroment.
 
         .. note:: Before navigation you have to run localization of the robot.
+
+        .. warning:: Navigation to 2D point work only up to 3 meters from robot.
+
+        :Example:
+
+        >>> pepper.robot_localization()
+        >>> pepper.navigate_to(1.0, 0.3)
 
         :param x: X axis in meters
         :type x: float
@@ -531,6 +572,11 @@ class Pepper:
         a face it will says 'I found a volunteer' and raise a hand toward
         her/him and move forward. Then it get's into a default 'StandInit'
         pose.
+
+        :Example:
+
+        >>> pepper.pick_a_volunteer()
+
         """
         volunteer_found = False
         self.unsubscribe_effector()
@@ -576,6 +622,10 @@ class Pepper:
         Shares a location on localhost via HTTPS to Pepper be
         able to reach it by subscribing to IP address of this
         computer.
+
+        :Example:
+
+        >>> pepper.share_localhost("/Users/pepper/Desktop/web/")
 
         :param folder: Root folder to share
         :type folder: string

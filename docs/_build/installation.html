@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; CIIRC Pepper API 1.2.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Pepper API" href="pepper_doc.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CIIRC Pepper API
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="pepper_doc.html">Pepper API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-virtual-speech-recognition">Install virtual speech recognition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-virtual-text-to-speech">Install virtual text to speech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pynaoqi-in-pycharm">PyNaoqi in PyCharm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-vqa">Install VQA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sharing-a-image-of-website-to-a-robot">Sharing a image of website to a Robot</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CIIRC Pepper API</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="install-virtual-speech-recognition">
+<h2>Install virtual speech recognition<a class="headerlink" href="#install-virtual-speech-recognition" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><cite>brew install pyaudio</cite></li>
+<li><cite>sudo -H pip install pyaudio</cite></li>
+<li><cite>sudo -H pip install SpeechRecognition</cite></li>
+</ul>
+</div>
+<div class="section" id="install-virtual-text-to-speech">
+<h2>Install virtual text to speech<a class="headerlink" href="#install-virtual-text-to-speech" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><cite>sudo -H pip install gtts</cite></li>
+<li><cite>sudo -H pip install playsound</cite></li>
+</ul>
+<p>If using macOS you will need to install <cite>Objective-C</cite> bindings with:</p>
+<ul class="simple">
+<li><cite>pip install pyobjc –user</cite></li>
+</ul>
+</div>
+<div class="section" id="pynaoqi-in-pycharm">
+<h2>PyNaoqi in PyCharm<a class="headerlink" href="#pynaoqi-in-pycharm" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Use version 2.5.5 from SoftBank download page</li>
+<li>Add <cite>~/pynaoqi/lib/python2.7/site-packages</cite> and <cite>~/pynaoqi/lib</cite> path to <cite>.bash_profile</cite></li>
+<li>Open PyCharm and add <cite>site-packages</cite> to libraries (in interpreter of project options)</li>
+<li>Open <cite>Edit configuration…</cite> and add <cite>lib</cite> to <cite>Enviroment variables</cite></li>
+</ul>
+</div>
+<div class="section" id="install-vqa">
+<h2>Install VQA<a class="headerlink" href="#install-vqa" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><cite>pip install tensorflow==1.0.0</cite></li>
+<li>Install TensorFlow Fold 0.0.1</li>
+</ul>
+</div>
+<div class="section" id="sharing-a-image-of-website-to-a-robot">
+<h2>Sharing a image of website to a Robot<a class="headerlink" href="#sharing-a-image-of-website-to-a-robot" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Run in a folder you wont to host <cite>python -m SimpleHTTPServer</cite></li>
+<li>Open a website at <cite>&lt;remote_computer_IP&gt;:8000/&lt;page_like_index.html&gt;</cite></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="pepper_doc.html" class="btn btn-neutral" title="Pepper API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Michael Tesar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.2.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

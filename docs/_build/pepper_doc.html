@@ -1,0 +1,927 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Pepper API &mdash; CIIRC Pepper API 1.2.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Welcome to CIIRC Pepper documentation!" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CIIRC Pepper API
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pepper API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CIIRC Pepper API</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Pepper API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/pepper_doc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-robot">
+<span id="pepper-api"></span><h1>Pepper API<a class="headerlink" href="#module-robot" title="Permalink to this headline">¶</a></h1>
+<p>This is a wrapper around <cite>qi</cite> framework by Aldebaran
+to control Pepper the humanoid robot with Python 2.7.</p>
+<p>Package uses high-level commands to move robot, take
+camera input or run Google Recognition API to get speech
+recognition.</p>
+<p>It also includes a virtual robot for testing purposes.</p>
+<dl class="class">
+<dt id="robot.Pepper">
+<em class="property">class </em><code class="descclassname">robot.</code><code class="descname">Pepper</code><span class="sig-paren">(</span><em>ip_address</em>, <em>port=9559</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Real robot controller</strong></p>
+<p>Create an instance of real robot controller by specifying
+a robot’s IP address and port. IP address can be:</p>
+<ul class="simple">
+<li>hostname (hostname like <cite>pepper.local</cite>)</li>
+<li>IP address (can be obtained by pressing robot’s <em>chest button</em>)</li>
+</ul>
+<p>Default port is usually used, e.g. <cite>9559</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span> <span class="o">=</span> <span class="n">Pepper</span><span class="p">(</span><span class="s2">&quot;pepper.local&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span> <span class="o">=</span> <span class="n">Pepper</span><span class="p">(</span><span class="s2">&quot;192.169.0.1&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="robot.Pepper.autonomous_life_off">
+<code class="descname">autonomous_life_off</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.autonomous_life_off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch autonomous life off</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">After switching off, robot stays in resting posture. After         turning autonomous life default posture is invoked</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.autonomous_life_on">
+<code class="descname">autonomous_life_on</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.autonomous_life_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch autonomous life on</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.battery_status">
+<code class="descname">battery_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.battery_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Say a battery status</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.blink_eyes">
+<code class="descname">blink_eyes</code><span class="sig-paren">(</span><em>rgb</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.blink_eyes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blink eyes with defined color</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rgb</strong> (<em>integer</em>) – Color in RGB space</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">blink_eyes</span><span class="p">([</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.exploration_mode">
+<code class="descname">exploration_mode</code><span class="sig-paren">(</span><em>radius</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.exploration_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start exploration mode when robot it performing a SLAM
+in specified radius. Then it saves a map into robot into
+its default folder.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">When robot would not move maybe it only needs         to set smaller safety margins. Take a look and <cite>set_security_distance()</cite></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Default folder for saving maps on the robot is:         <cite>/home/nao/.local/share/Explorer/</cite></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>radius</strong> (<em>integer</em>) – Distance in meters</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">image</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">cv2 image</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.get_camera_frame">
+<code class="descname">get_camera_frame</code><span class="sig-paren">(</span><em>show</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.get_camera_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get camera frame from subscribed camera link.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Please subscribe to camera before getting a camera frame. After         you don’t need it unsubscribe it.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>show</strong> (<em>bool</em>) – Show image when recieved and wait for <cite>ESC</cite></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">image</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">cv2 image</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.load_map">
+<code class="descname">load_map</code><span class="sig-paren">(</span><em>file_name</em>, <em>file_path='/home/nao/.local/share/Explorer/'</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.load_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load stored map on a robot. It will find a map in default location,
+in other cases alternative path can be specifies by <cite>file_name</cite>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Default path of stored maps is <cite>/home/nao/.local/share/Explorer/</cite></p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If file path is specified it is needed to have <a href="#id1"><span class="problematic" id="id2">`</span></a>` at the end.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_name</strong> (<em>string</em>) – Name of the map</li>
+<li><strong>file_path</strong> (<em>string</em>) – Path to the map</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.move_forward">
+<code class="descname">move_forward</code><span class="sig-paren">(</span><em>speed</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.move_forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move forward with certain speed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>speed</strong> (<em>float</em>) – Positive values forward, negative backwards</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.move_head_default">
+<code class="descname">move_head_default</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.move_head_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put head into default position in ‘StandInit’ pose</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.move_head_down">
+<code class="descname">move_head_down</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.move_head_down" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look down</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.move_head_up">
+<code class="descname">move_head_up</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.move_head_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.move_to_circle">
+<code class="descname">move_to_circle</code><span class="sig-paren">(</span><em>clockwise</em>, <em>t=10</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.move_to_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move a robot into circle for specified time</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This example only count on time not finished circles.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">move_to_circle</span><span class="p">(</span><span class="n">clockwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>clockwise</strong> (<em>bool</em>) – Specifies a direction to turn around</li>
+<li><strong>t</strong> (<em>float</em>) – Time in seconds (default 10)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.navigate_to">
+<code class="descname">navigate_to</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.navigate_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Navigate robot in map based on exploration mode
+or load previously mapped enviroment.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Before navigation you have to run localization of the robot.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Navigation to 2D point work only up to 3 meters from robot.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">robot_localization</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">navigate_to</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>float</em>) – X axis in meters</li>
+<li><strong>y</strong> (<em>float</em>) – Y axis in meters</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.pick_a_volunteer">
+<code class="descname">pick_a_volunteer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.pick_a_volunteer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Complex movement for choosing a random people.</p>
+<p>If robot does not see any person it will automatically after several
+seconds turning in one direction and looking for a human. When it detects
+a face it will says ‘I found a volunteer’ and raise a hand toward
+her/him and move forward. Then it get’s into a default ‘StandInit’
+pose.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">pick_a_volunteer</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.play_sound">
+<code class="descname">play_sound</code><span class="sig-paren">(</span><em>sound</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.play_sound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play a <cite>mp3</cite> or <cite>wav</cite> sound stored on Pepper</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is working only for songs stored in robot.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sound</strong> (<em>string</em>) – Absolute path to the sound</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.point_at">
+<code class="descname">point_at</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>effector_name</em>, <em>frame</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.point_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Point end-effector in cartesian space</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">point_at</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;RArm&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>float</em>) – X axis in meters</li>
+<li><strong>y</strong> (<em>float</em>) – Y axis in meters</li>
+<li><strong>z</strong> (<em>float</em>) – Z axis in meters</li>
+<li><strong>effector_name</strong> (<em>string</em>) – <cite>LArm</cite>, <cite>RArm</cite> or <cite>Arms</cite></li>
+<li><strong>frame</strong> (<em>integer</em>) – 0 = Torso, 1 = World, 2 = Robot</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.rest">
+<code class="descname">rest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.rest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get robot into default resting position know as <cite>Crouch</cite></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.restart_robot">
+<code class="descname">restart_robot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.restart_robot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restart robot (it takes several minutes)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.robot_localization">
+<code class="descname">robot_localization</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.robot_localization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Localize a robot in a map</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">After loading a map into robot or after new exploration         robots always need to run a self localization. Even some movement in         cartesian space demands localization.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.say">
+<code class="descname">say</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.say" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text to speech (robot internal engine)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> (<em>string</em>) – Text to speech</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.set_awareness">
+<code class="descname">set_awareness</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.set_awareness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn on or off the basic awareness of the robot,
+e.g. looking for humans, self movements etc.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> (<em>bool</em>) – If True set on, if False set off</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.set_security_distance">
+<code class="descname">set_security_distance</code><span class="sig-paren">(</span><em>distance=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.set_security_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set security distance. Lower distance for passing doors etc.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It is not wise to turn <cite>security distance</cite> off.        Robot may fall from stairs or bump into any fragile objects.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">set_security_distance</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>distance</strong> (<em>float</em>) – Distance from the objects in meters</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.set_volume">
+<code class="descname">set_volume</code><span class="sig-paren">(</span><em>volume</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.set_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set robot volume in percentage</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>volume</strong> (<em>integer</em>) – From 0 to 100 %</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="robot.Pepper.share_localhost">
+<em class="property">static </em><code class="descname">share_localhost</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.share_localhost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shares a location on localhost via HTTPS to Pepper be
+able to reach it by subscribing to IP address of this
+computer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">share_localhost</span><span class="p">(</span><span class="s2">&quot;/Users/pepper/Desktop/web/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>folder</strong> (<em>string</em>) – Root folder to share</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.show_map">
+<code class="descname">show_map</code><span class="sig-paren">(</span><em>on_robot=False</em>, <em>remote_ip=None</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.show_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows a map from robot based on previously loaded one
+or explicit exploration of the scene. It can be viewed on
+the robot or in the computer by OpenCV.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>on_robot</strong> (<em>bool</em>) – If set shows a map on the robot</li>
+<li><strong>remote_ip</strong> (<em>string</em>) – IP address of remote (default None)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Showing map on the robot is not fully supported at the moment.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.shutdown_robot">
+<code class="descname">shutdown_robot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.shutdown_robot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn off the robot completely</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.stand">
+<code class="descname">stand</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.stand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get robot into default standing position known as <cite>StandInit</cite> or <cite>Stand</cite></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.stop_localization">
+<code class="descname">stop_localization</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.stop_localization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop localization of the robot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.stop_moving">
+<code class="descname">stop_moving</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.stop_moving" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop robot from moving by <cite>move_around</cite> and <cite>turn_around</cite> methods</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.stop_sound">
+<code class="descname">stop_sound</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.stop_sound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop sound</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.subscribe_camera">
+<code class="descname">subscribe_camera</code><span class="sig-paren">(</span><em>camera</em>, <em>resolution</em>, <em>fps</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.subscribe_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subscribe to a camera service. You need to subscribe a camera
+before you reach a images from it.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Each subscription has to have a unique name         otherwise it will conflict it and you will not be able to         get any images due to return value None from stream.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">subscribe_camera</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">pepper</span><span class="o">.</span><span class="n">get_camera_frame</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">unsubscribe_camera</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>camera</strong> (<em>string</em>) – <cite>camera_top</cite> or <cite>camera_bottom</cite></li>
+<li><strong>resolution</strong> (<em>integer</em>) – <ol class="arabic" start="0">
+<li>160x120</li>
+<li>320x240</li>
+<li>640x480</li>
+<li>1280x960</li>
+</ol>
+</li>
+<li><strong>fps</strong> (<em>integer</em>) – Frames per sec (5, 10, 15 or 30)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.tablet_show_image">
+<code class="descname">tablet_show_image</code><span class="sig-paren">(</span><em>image_url</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.tablet_show_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display image on robot tablet</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">For more take a look at <cite>tablet_show_web()</cite></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">tablet_show_image</span><span class="p">(</span><span class="s2">&quot;https://goo.gl/4Xq6Bc&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>image_url</strong> (<em>string</em>) – Image URL (local or web)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.tablet_show_settings">
+<code class="descname">tablet_show_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.tablet_show_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show robot settings on the tablet</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.tablet_show_web">
+<code class="descname">tablet_show_web</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.tablet_show_web" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a web page on robot’s tablet. It also works for
+sharing a locally stored images and websites by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">share_localhost</span><span class="p">(</span><span class="s2">&quot;/Users/user/Desktop/web_host/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">tablet_show_web</span><span class="p">(</span><span class="s2">&quot;&lt;remote_ip&gt;:8000/web_host/index.html&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">tablet_show_web</span><span class="p">(</span><span class="s2">&quot;https://www.ciirc.cvut.cz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Or you can simply run <cite>python -m SimpleHTTPServer</cite> in the root of         the web host and host it by self on specified port. Default is 8000.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>url</strong> (<em>string</em>) – Web URL</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.track_object">
+<code class="descname">track_object</code><span class="sig-paren">(</span><em>object_name</em>, <em>effector_name</em>, <em>diameter=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.track_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Track a object with a given object type and diameter. If <cite>Face</cite> is
+chosen it has a default parameters to 15 cm diameter per face. After
+staring tracking in will wait until user press ctrl+c.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">For more info about tracking modes, object names and other:        <a class="reference external" href="http://doc.aldebaran.com/2-5/naoqi/trackers/index.html#tracking-modes">http://doc.aldebaran.com/2-5/naoqi/trackers/index.html#tracking-modes</a></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">track_object</span><span class="p">(</span><span class="s2">&quot;Face&quot;</span><span class="p">,</span> <span class="s2">&quot;Arms&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pepper</span><span class="o">.</span><span class="n">track_object</span><span class="p">(</span><span class="s2">&quot;RedBall&quot;</span><span class="p">,</span> <span class="s2">&quot;LArm&quot;</span><span class="p">,</span> <span class="n">diameter</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>object_name</strong> – <cite>RedBall</cite>, <cite>Face</cite>, <cite>LandMark</cite>, <cite>LandMarks</cite>, <cite>People</cite> or <cite>Sound</cite></li>
+<li><strong>effector_name</strong> – <cite>LArm</cite>, <cite>RArm</cite>, <cite>Arms</cite></li>
+<li><strong>diameter</strong> – Diameter of the object (default 0.05, for face default 0.15)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.turn_around">
+<code class="descname">turn_around</code><span class="sig-paren">(</span><em>speed</em><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.turn_around" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn around its axis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>speed</strong> (<em>float</em>) – Positive values to right, negative to left</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.unsubscribe_camera">
+<code class="descname">unsubscribe_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.unsubscribe_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unsubscribe to camera after you don’t need it</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="robot.Pepper.unsubscribe_effector">
+<code class="descname">unsubscribe_effector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.Pepper.unsubscribe_effector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unsubscribe a end-effector after tracking some object</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It has to be done right after each tracking by hands.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="robot.VirtualPepper">
+<em class="property">class </em><code class="descclassname">robot.</code><code class="descname">VirtualPepper</code><a class="headerlink" href="#robot.VirtualPepper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Virtual robot for testing</p>
+<dl class="staticmethod">
+<dt id="robot.VirtualPepper.camera_image">
+<em class="property">static </em><code class="descname">camera_image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.VirtualPepper.camera_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show one frame from web camera (if any)</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="robot.VirtualPepper.listen">
+<em class="property">static </em><code class="descname">listen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.VirtualPepper.listen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Speech to text by Google Speech Recognition</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="robot.VirtualPepper.say">
+<em class="property">static </em><code class="descname">say</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.VirtualPepper.say" title="Permalink to this definition">¶</a></dt>
+<dd><p>Say some text trough text to speech</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> (<em>string</em>) – Text to speech</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="robot.VirtualPepper.stream_camera">
+<em class="property">static </em><code class="descname">stream_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#robot.VirtualPepper.stream_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stream web camera of the computer (if any)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to CIIRC Pepper documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Michael Tesar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.2.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

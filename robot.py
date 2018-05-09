@@ -1,18 +1,12 @@
 """
-PEPPER ROBOT API for Python
-===========================
+This is a wrapper around `qi` framework by Aldebaran
+to control Pepper the humanoid robot with Python 2.7.
 
-This code implements a real robot controller based on several
-qi services and it also includes a virtual robot mainly for
-camera and speech recognition testing purposes.
+Package uses high-level commands to move robot, take
+camera input or run Google Recognition API to get speech
+recognition.
 
-Copyright (c) CTU in Prague  - All Rights Reserved
-
-Created on: 3.5.2018 Plymouth, United Kingdom
-
-Author: Michael Tesar
-
-<michael.tesar@cvut.cz>
+It also includes a virtual robot for testing purposes.
 """
 import qi
 import time
@@ -28,61 +22,40 @@ class Pepper:
     """
     **Real robot controller**
 
-    Specify a address of the robot by:
+    Create an instance of real robot controller by specifying
+    a robot's IP address and port. IP address can be:
 
-    - hostname (*Avahai* style hostname like `pepper.local`)
+    - hostname (hostname like `pepper.local`)
     - IP address (can be obtained by pressing robot's *chest button*)
 
-    Port is usually the same, e.g 9559 and it is not
-    mandatory to specify.
+    Default port is usually used, e.g. `9559`.
 
-    ```
-    python
-    pepper = Pepper("paprika.local")
-    ```
+    :Example:
+
+    >>> pepper = Pepper("pepper.local")
+    >>> pepper = Pepper("192.169.0.1", 1234)
+
     """
     def __init__(self, ip_address, port=9559):
-        """
-        Class constructor
-
-        - `ip_address`: IP address of the robot
-        - `port`: port, default 9559
-        """
         self.session = qi.Session()
         self.session.connect("tcp://" + ip_address + ":" + str(port))
 
         self.posture_service = self.session.service("ALRobotPosture")
-        '''Posture service for managing postures (like `StandInit` or `Rest`)'''
         self.motion_service = self.session.service("ALMotion")
-        '''Service for all motion related tasks except navigation (it has separate service)'''
         self.tracker_service = self.session.service("ALTracker")
-        '''Service for tracking objects such as red ball or face'''
         self.tts_service = self.session.service("ALAnimatedSpeech")
-        '''Text to speech service with small movements while robot speaks'''
         self.tablet_service = self.session.service("ALTabletService")
-        '''Tablet communication service'''
         self.autonomous_life_service = self.session.service("ALAutonomousLife")
-        '''Service for turning on and off the autonomous life'''
         self.system_service = self.session.service("ALSystem")
-        '''Core system service of the robot'''
         self.navigation_service = self.session.service("ALNavigation")
-        '''Service for navigation and localization fo the robot'''
         self.battery_service = self.session.service("ALBattery")
-        '''Battery status service'''
         self.awareness_service = self.session.service("ALBasicAwareness")
-        '''Service of basic awareness which is part of autonomous life'''
         self.led_service = self.session.service("ALLeds")
-        '''Service fot LEDs on the robot'''
         self.audio_device = self.session.service("ALAudioDevice")
-        '''Service for audio capture'''
         self.camera_device = self.session.service("ALVideoDevice")
-        '''Service for camera communication and image transfer'''
         self.face_detection_service = self.session.service("ALFaceDetection")
-        '''Face detection service'''
         self.memory_service = self.session.service("ALMemory")
-        '''Service for previously stored `memories`'''
         self.audio_service = self.session.service("ALAudioPlayer")
-        '''Service for playing the music on the robot'''
 
         self.slam_map = None
         self.localization = None
@@ -102,18 +75,18 @@ class Pepper:
 
     def point_at(self, x, y, z, effector_name, frame):
         """
-        Point to some cartesian space coordinates
-        by selected end-effector
+        Point end-effector in cartesian space
 
-        - `frame`: in which is relative to
-            - 0: Torso
-            - 1: World
-            - 2: Robot
-        - `x`: X axis in meters
-        - `y`: Y axis in meters
-        - `z`: Z axis in meters
-        - `effector_name`: One of the end-effectors:
-            -LArm, RArm or Arms
+        :param x: X axis in meters
+        :type x: float
+        :param y: Y axis in meters
+        :type y: float
+        :param z: Z axis in meters
+        :type z: float
+        :param effector_name: `LArm`, `RArm` or `Arms`
+        :type effector_name: string
+        :param frame: 0 = Torso, 1 = World, 2 = Robot
+        :type frame: integer
         """
         speed = 0.5     # 50 % of speed
         self.tracker_service.pointAt(effector_name, [x, y, z], frame, speed)
@@ -122,17 +95,17 @@ class Pepper:
         """
         Move forward with certain speed
 
-        - `speed`: Speed *(positive forward, negative backward)*
+        :param speed: Positive values forward, negative backwards
+        :type speed: float
         """
         self.motion_service.move(speed, 0, 0)
 
     def turn_around(self, speed):
         """
-        Turn around the robot by speed
+        Turn around its axis
 
-        - `speed`: Speed of turning around
-            - negative values turns to left
-            - positive values turns to right
+        :param speed: Positive values to right, negative to left
+        :type speed: float
         """
         self.motion_service.move(0, 0, speed)
 
@@ -144,27 +117,25 @@ class Pepper:
         """
         Text to speech (robot internal engine)
 
-        - `text`: Text to speech
+        :param text: Text to speech
+        :type text: string
         """
         self.tts_service.say(text)
         print("[INFO]: Robot says: " + text)
 
     def tablet_show_web(self, url):
         """
-        Show web page on robot tablet. It also works for
-        sharing a locally stored images and websites to
-        Pepper tablet by running:
+        Display a web page on robot's tablet. It also works for
+        sharing a locally stored images and websites by running:
 
-            `pepper.share_localhost("~/Desktop/my_web_to_host/")`
+        >>> pepper.share_localhost("/Users/user/Desktop/web_host/")
+        >>> pepper.tablet_show_web("<remote_ip>:8000/web_host/index.html")
 
-        And then connects to in by:
+        .. note:: Or you can simply run `python -m SimpleHTTPServer` in the root of \
+        the web host and host it by self on specified port. Default is 8000.
 
-            `pepper.tablet_show_web(<remote_ip>:8000/my_web_to_host/index.html")`
-
-        Or you can start server manually:
-            `python -m SimpleHTTPServer` (if empty default port is used: 8000)
-
-        - `url`: Web URL
+        :param url: Web URL
+        :type  url: string
         """
         self.tablet_service.turnScreenOn(True)
         self.tablet_service.showWebview()
@@ -172,9 +143,12 @@ class Pepper:
 
     def tablet_show_image(self, image_url):
         """
-        Show image from URL: from outside or locally stored
+        Display image on robot tablet
 
-        - `image_url`: Image URL
+        .. seealso:: For more take a look at `tablet_show_web()`
+
+        :param image_url: Image URL (local or web)
+        :type image_url: string
         """
         self.tablet_service.showImage(image_url)
 
@@ -193,7 +167,12 @@ class Pepper:
         self.system_service.shutdown()
 
     def autonomous_life_off(self):
-        """Switch autonomous life off and get into default position"""
+        """
+        Switch autonomous life off
+
+        .. note:: After switching off, robot stays in resting posture. After \
+        turning autonomous life default posture is invoked
+        """
         self.autonomous_life_service.setState("disabled")
         self.stand()
         print("[INFO]: Autonomous life is off")
@@ -205,16 +184,16 @@ class Pepper:
 
     def track_object(self, object_name, effector_name, diameter=0.05):
         """
-        Track a object with a given object type and diameter. If 'Face' is
+        Track a object with a given object type and diameter. If `Face` is
         chosen it has a default parameters to 15 cm diameter per face. After
         staring tracking in will wait until user press ctrl+c.
 
-        For more info about tracking modes, object names and other:
+        .. seealso:: For more info about tracking modes, object names and other:\
         http://doc.aldebaran.com/2-5/naoqi/trackers/index.html#tracking-modes
 
-        - `object_name`: One of these: RedBall, Face, LandMark, LandMarks, People, Sound
-        - `effector_name`: One of these: LArm, RArm, Arms
-        - `diameter`: Diameter of the object (default 0.05, for face default 0.15)
+        :param object_name: `RedBall`, `Face`, `LandMark`, `LandMarks`, `People` or `Sound`
+        :param effector_name: `LArm`, `RArm`, `Arms`
+        :param diameter: Diameter of the object (default 0.05, for face default 0.15)
         """
         if object == "Face":
             self.tracker_service.registerTarget(object_name, 0.15)
@@ -245,9 +224,16 @@ class Pepper:
         in specified radius. Then it saves a map into robot into
         its default folder.
 
-        - `radius`: Distance in meters
+        .. seealso:: When robot would not move maybe it only needs \
+        to set smaller safety margins. Take a look and `set_security_distance()`
 
-        Returns OpenCV image array
+        .. note:: Default folder for saving maps on the robot is: \
+        `/home/nao/.local/share/Explorer/`
+
+        :param radius: Distance in meters
+        :type radius: integer
+        :return: image
+        :rtype: cv2 image
         """
         self.say("Starting exploration in " + str(radius) + " meters")
         self.navigation_service.explore(radius)
@@ -275,8 +261,12 @@ class Pepper:
         or explicit exploration of the scene. It can be viewed on
         the robot or in the computer by OpenCV.
 
-        - `on_robot`: Show the map on a robot (default False)
-        - `remote_ip`: IP address of remote localhost (default None)
+        :param on_robot: If set shows a map on the robot
+        :type on_robot: bool
+        :param remote_ip: IP address of remote (default None)
+        :type remote_ip: string
+
+        .. warning:: Showing map on the robot is not fully supported at the moment.
         """
         result_map = self.navigation_service.getMetricalMap()
         map_width = result_map[1]
@@ -315,7 +305,13 @@ class Pepper:
             cv2.destroyAllWindows()
 
     def robot_localization(self):
-        """Localize a robot in a map which was loaded or after exploration"""
+        """
+        Localize a robot in a map
+
+        .. note:: After loading a map into robot or after new exploration \
+        robots always need to run a self localization. Even some movement in \
+        cartesian space demands localization.
+        """
         try:
             self.navigation_service.startLocalization()
             localization = self.navigation_service.getRobotPositionInMap()
@@ -335,17 +331,24 @@ class Pepper:
         Load stored map on a robot. It will find a map in default location,
         in other cases alternative path can be specifies by `file_name`.
 
-        - `file_name`: (string) Name of the map
-        - `file_path`: (string) Path to the map with '/' at the end (points at default path)
+        .. note:: Default path of stored maps is `/home/nao/.local/share/Explorer/`
+
+        .. warning:: If file path is specified it is needed to have `\` at the end.
+
+        :param file_name: Name of the map
+        :type file_name: string
+        :param file_path: Path to the map
+        :type file_path: string
         """
         self.slam_map = self.navigation_service.loadExploration(file_path + file_name)
         print("[INFO]: Map '" + file_name + "' loaded")
 
     def set_volume(self, volume):
         """
-        Set robot volume in 0 - 100 %
+        Set robot volume in percentage
 
-        - `volume`: Volume of the robot
+        :param volume: From 0 to 100 %
+        :type volume: integer
         """
         self.audio_device.setOutputVolume(volume)
         self.say("Volume is set to " + str(volume) + " percent")
@@ -360,7 +363,8 @@ class Pepper:
         Turn on or off the basic awareness of the robot,
         e.g. looking for humans, self movements etc.
 
-        - `state`: If True set on, if False set off
+        :param state: If True set on, if False set off
+        :type state: bool
         """
         if state:
             self.awareness_service.resumeAwareness()
@@ -372,17 +376,22 @@ class Pepper:
     def subscribe_camera(self, camera, resolution, fps):
         """
         Subscribe to a camera service. You need to subscribe a camera
-        before you reach a images from it. Each subscription has to have
-        a unique name otherwise it will conflict it and you will not
-        be able to get any images due to return value None from stream.
+        before you reach a images from it.
 
-        - `fps`: One of 5, 10, 15 or 30 FPS
-        - `camera`: One of camera_top, camera_bottom
-        - `resolution`:
-            - 0: 160x120
-            - 1: 320x240
-            - 2: 640x480
-            - 3: 1280x960
+        .. warning:: Each subscription has to have a unique name \
+        otherwise it will conflict it and you will not be able to \
+        get any images due to return value None from stream.
+
+        :param camera: `camera_top` or `camera_bottom`
+        :type camera: string
+        :param resolution:
+            0. 160x120
+            1. 320x240
+            2. 640x480
+            3. 1280x960
+        :type resolution: integer
+        :param fps: Frames per sec (5, 10, 15 or 30)
+        :type fps: integer
         """
         camera_index = None
         if camera == "camera_top":
@@ -406,12 +415,13 @@ class Pepper:
         """
         Get camera frame from subscribed camera link.
 
-        Please subscribe to camera before getting a camera frame. After
+        .. warning:: Please subscribe to camera before getting a camera frame. After \
         you don't need it unsubscribe it.
 
-        - `show`: Show image with OpenCV
-
-        Returns a camera frame
+        :param show: Show image when recieved and wait for `ESC`
+        :type show: bool
+        :return: image
+        :rtype: cv2 image
         """
         image_raw = self.camera_device.getImageRemote(self.camera_link)
         image = numpy.frombuffer(image_raw[6], numpy.uint8).reshape(image_raw[1], image_raw[0], 3)
@@ -427,7 +437,11 @@ class Pepper:
         """
         Set security distance. Lower distance for passing doors etc.
 
-        - `distance`: Set distance to the closer objects (default 0.05)
+        .. warning:: It is not wise to turn `security distance` off.\
+        Robot may fall from stairs or bump into any fragile objects.
+
+        :param distance: Distance from the objects in meters
+        :type distance: float
         """
         self.motion_service.setOrthogonalSecurityDistance(distance)
         print("[INFO]: Security distance set to " + str(distance) + " m")
@@ -448,8 +462,10 @@ class Pepper:
         """
         Move a robot into circle for specified time
 
-        - `clockwise`: Specifies a direction to turn around
-        - `t`: Time in seconds (default 10)
+        :param clockwise: Specifies a direction to turn around
+        :type clockwise: bool
+        :param t: Time in seconds (default 10)
+        :type t: float
         """
         if clockwise:
             self.motion_service.moveToward(0.5, 0.0, 0.6)
@@ -462,18 +478,28 @@ class Pepper:
         """
         Blink eyes with defined color
 
-        - `rgb`: Color in RGB space
+        :param rgb: Color in RGB space
+        :type rgb: integer
+
+        :Example:
+
+        >>> pepper.blink_eyes([255, 0, 0])
+
         """
+        # TODO: Not sure if it is RGB or BGR
         self.led_service.fadeRGB('AllLeds', rgb[0], rgb[1], rgb[2], 1.0)
 
     def navigate_to(self, x, y):
         """
         Navigate robot in map based on exploration mode
-        or load previsouly mapped enviroment. Before navigation
-        you have to run localization of the robot.
+        or load previously mapped enviroment.
 
-        - `x`: X axis in meters
-        - `y`: Y axis in meters
+        .. note:: Before navigation you have to run localization of the robot.
+
+        :param x: X axis in meters
+        :type x: float
+        :param y: Y axis in meters
+        :type y: float
         """
         print("[INFO]: Trying to navigate into specified location")
         try:
@@ -487,16 +513,21 @@ class Pepper:
             self.say("I cannot move in that direction")
 
     def unsubscribe_effector(self):
-        """Unsubscribe a end-effector after tracking some object"""
+        """
+        Unsubscribe a end-effector after tracking some object
+
+        .. note:: It has to be done right after each tracking by hands.
+        """
         self.tracker_service.unregisterAllTargets()
         self.tracker_service.setEffector("None")
         print("[INFO]: End-effector is unsubscribed")
 
     def pick_a_volunteer(self):
         """
-        Complex movement for choosing a random people. It robot does not
-        see any person it will automatically after several seconds
-        turning in one direction and looking for a human. When it detects
+        Complex movement for choosing a random people.
+
+        If robot does not see any person it will automatically after several
+        seconds turning in one direction and looking for a human. When it detects
         a face it will says 'I found a volunteer' and raise a hand toward
         her/him and move forward. Then it get's into a default 'StandInit'
         pose.
@@ -546,7 +577,8 @@ class Pepper:
         able to reach it by subscribing to IP address of this
         computer.
 
-        - `folder`: Root folder to share
+        :param folder: Root folder to share
+        :type folder: string
         """
         # TODO: Add some elegant method to kill a port if previously opened
         subprocess.Popen(["cd", folder])
@@ -555,9 +587,12 @@ class Pepper:
 
     def play_sound(self, sound):
         """
-        Play a *.mp3 or *.wav sound stored on Pepper
+        Play a `mp3` or `wav` sound stored on Pepper
 
-        - `sound`: Absolute path to the sound
+        .. note:: This is working only for songs stored in robot.
+
+        :param sound: Absolute path to the sound
+        :type sound: string
         """
         print("[INFO]: Playing " + sound)
         self.audio_service.playFile(sound)
@@ -580,7 +615,8 @@ class VirtualPepper:
         """
         Say some text trough text to speech
 
-        - `text`: Text to speech
+        :param text: Text to speech
+        :type text: string
         """
         tts = gtts.gTTS(text, lang="en")
         tts.save("./tmp_speech.mp3")

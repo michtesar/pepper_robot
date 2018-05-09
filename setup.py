@@ -8,5 +8,6 @@ setup(
     license='BSD',
     author='Michael Tesar',
     author_email='michael.tesar@cvut.cz',
-    description='Pepper controller for PyNaoqi framework'
+    description='Pepper controller for PyNaoqi framework',
+    install_requires=['opencv-python', 'numpy', 'gtts', 'playsound']
 )

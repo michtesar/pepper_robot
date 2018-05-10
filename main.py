@@ -3,7 +3,7 @@ import time
 
 pepper = Pepper("pepper.local")
 
-#pepper.stat_animation("Hey_1")
+#pepper.start_animation("Hey_1")
 
 
 """

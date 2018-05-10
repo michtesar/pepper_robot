@@ -656,7 +656,7 @@ class Pepper:
         print("[INFO]: Stop playing the sound")
         self.audio_service.stopAll()
 
-    def stat_animation(self, animation):
+    def start_animation(self, animation):
         """
         Starts a animation which is stored on robot
 

@@ -7,13 +7,13 @@ Welcome to CIIRC Pepper documentation!
 =======================================================
 
 .. toctree::
-   :maxdepth: 2
    :caption: Contents:
 
    pepper_doc
    installation
-
-
+   publish_docs
+   contacts
+   contribution
 
 Indices and tables
 ==================

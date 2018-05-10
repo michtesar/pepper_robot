@@ -56,12 +56,14 @@ class Pepper:
         self.face_detection_service = self.session.service("ALFaceDetection")
         self.memory_service = self.session.service("ALMemory")
         self.audio_service = self.session.service("ALAudioPlayer")
+        self.animation_service = self.session.service("ALAnimationPlayer")
+        self.behavior_service = self.session.service("ALBehaviorManager")
 
         self.slam_map = None
         self.localization = None
         self.camera_link = None
 
-        print("[INFO]: Robot is initialized at " + ip_address + ":" + port)
+        print("[INFO]: Robot is initialized at " + ip_address + ":" + str(port))
 
     def stand(self):
         """Get robot into default standing position known as `StandInit` or `Stand`"""
@@ -338,7 +340,8 @@ class Pepper:
             self.localization = localization[0]
             print("[INFO]: Localization complete")
             self.navigation_service.stopLocalization()
-        except:
+        except Exception as error:
+            print(error)
             print("[ERROR]: Localization failed")
 
     def stop_localization(self):
@@ -549,7 +552,8 @@ class Pepper:
             self.navigation_service.stopLocalization()
             print("[INFO]: Successfully got into location")
             self.say("At your command")
-        except:
+        except Exception as error:
+            print(error)
             print("[ERROR]: Failed to got into location")
             self.say("I cannot move in that direction")
 
@@ -651,6 +655,54 @@ class Pepper:
         """Stop sound"""
         print("[INFO]: Stop playing the sound")
         self.audio_service.stopAll()
+
+    def stat_animation(self, animation):
+        """
+        Starts a animation which is stored on robot
+
+        .. seealso:: Take a look a the animation names in the robot \
+        http://doc.aldebaran.com/2-5/naoqi/motion/alanimationplayer.html#alanimationplayer
+
+        :param animation: Animation name
+        :type animation: string
+        :return: True when animation has finished
+        :rtype: bool
+        """
+        try:
+            animation_finished = self.animation_service.run("animations/[posture]/Gestures/" + animation, _async=True)
+            animation_finished.value()
+            return True
+        except Exception as error:
+            print(error)
+            return False
+
+    def start_dance(self):
+        """
+        Starts a robotic dance
+
+        :return: True when animation has finished
+        :rtype: bool
+        """
+        try:
+            animation_finished = self.animation_service.run("User/boston_animation_library/Stand/robotic_dance", _async=True)
+            animation_finished.value()
+            return True
+        except Exception as error:
+            print(error)
+            return False
+
+    def start_behavior(self, behavior):
+        """
+        Starts a behavior stored on robot
+
+        :param behavior: Behavior name
+        :type behavior: string
+        """
+        self.behavior_service.startBehavior(behavior)
+
+    def list_behavior(self):
+        """Prints all installed behaviors on the robot"""
+        print(self.behavior_service.getBehaviorNames())
 
 
 class VirtualPepper:

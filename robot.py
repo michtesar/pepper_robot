@@ -755,11 +755,17 @@ class Pepper:
 
     def listen_to(self, vocabulary):
         """
-        vocabulary = ["what color is the sky", "yes", "no"]
-        :param vocabulary:
-        :return:
+        Listen and match the vocabulary which is passed as parameter.
+
+        :Example:
+
+        >>> words = pepper.listen_to(["what color is the sky", "yes", "no"]
+
+        :param vocabulary: List of phrases or words to recognize
+        :type vocabulary: string
+        :return: Recognized phrase or words
+        :rtype: string
         """
-        # TODO: Return the word which was recognized
         self.speech_service.setLanguage("English")
         self.speech_service.pause(True)
         try:
@@ -774,26 +780,35 @@ class Pepper:
             self.speech_service.pause(False)
             time.sleep(4)
             words = self.memory_service.getData("WordRecognized")
-            print(words[0])
+            print("[INFO]: Robot understood: '" + words[0] + "'")
+            return words[0]
         except:
             pass
 
     def listen(self):
-        self.dialog_service.setLanguage("English")
-        topic_content = ("topic: ~wildcard_topic()\n"
-                        "language: enu\n"
-                        "u:(_*)\n")
-        self.dialog_service.loadTopicContent(topic_content)
-        self.dialog_service.subscribe("wildcard_dialog")
+        """
+        Wildcard speech recognition via internal Pepper engine
 
+        .. warning:: To get this proper working it is needed to disable or uninstall \
+        all application which can modify a vocabulary in a Pepper.
+
+        .. note:: Note this version only rely on time but not its internal speak processing \
+        this means that Pepper will 'bip' at the begining and the end of human speak \
+        but it is not taken a sound in between the beeps. Search for 'Robot is listening to \
+        you ... sentence in log console
+
+        :Example:
+
+        >>> words = pepper.listen()
+
+        :return: Speech to text
+        :rtype: string
+        """
+        print("[INFO]: Robot is listening to you...")
+        time.sleep(5)
         words = self.memory_service.getData("WordRecognized")
-        print words[0]
-
-        self.dialog_service.unsubscribe("wildcard_dialog")
-
-    def human_is_speaking(self):
-        speaking = self.memory_service.getData("ALSpeechRecognition/Status")
-        return speaking
+        print("[INFO]: Robot understood: '" + words[0] + "'")
+        return words[0]
 
 
 class VirtualPepper:

@@ -10,7 +10,7 @@ It also includes a virtual robot for testing purposes.
 """
 try:
     import qi
-except:
+except ImportError:
     print("Cannot import QI")
 import time
 import numpy
@@ -19,6 +19,7 @@ import speech_recognition
 import gtts
 import playsound
 import subprocess
+import dance
 
 
 class Pepper:
@@ -685,18 +686,9 @@ class Pepper:
 
     def start_dance(self):
         """
-        Starts a robotic dance
-
-        :return: True when animation has finished
-        :rtype: bool
+        Start a robotic dance
         """
-        try:
-            animation_finished = self.animation_service.run("User/boston_animation_library/Stand/robotic_dance", _async=True)
-            animation_finished.value()
-            return True
-        except Exception as error:
-            print(error)
-            return False
+        dance.dance(self.motion_service)
 
     def start_behavior(self, behavior):
         """

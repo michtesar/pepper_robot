@@ -8,10 +8,7 @@ recognition.
 
 It also includes a virtual robot for testing purposes.
 """
-try:
-    import qi
-except:
-    print("Cannot import QI")
+import qi
 import time
 import numpy
 import cv2

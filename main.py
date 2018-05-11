@@ -1,7 +1,8 @@
 from robot import *
 import time
 
-pepper = Pepper("pepper.local")
+pepper = Pepper("paprika.local")
+pepper.get_face_properties()
 
 #pepper.start_animation("Hey_1")
 

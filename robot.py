@@ -44,7 +44,7 @@ class Pepper:
         self.motion_service = self.session.service("ALMotion")
         self.tracker_service = self.session.service("ALTracker")
         self.tts_service = self.session.service("ALAnimatedSpeech")
-        self.tablet_service = self.session.service("ALTabletService")
+        #self.tablet_service = self.session.service("ALTabletService")
         self.autonomous_life_service = self.session.service("ALAutonomousLife")
         self.system_service = self.session.service("ALSystem")
         self.navigation_service = self.session.service("ALNavigation")
@@ -58,6 +58,8 @@ class Pepper:
         self.audio_service = self.session.service("ALAudioPlayer")
         self.animation_service = self.session.service("ALAnimationPlayer")
         self.behavior_service = self.session.service("ALBehaviorManager")
+        self.face_characteristic = self.session.service("ALFaceCharacteristics")
+        self.people_perception = self.session.service("ALPeoplePerception")
 
         self.slam_map = None
         self.localization = None
@@ -703,6 +705,51 @@ class Pepper:
     def list_behavior(self):
         """Prints all installed behaviors on the robot"""
         print(self.behavior_service.getBehaviorNames())
+
+    def get_face_properties(self):
+        """
+        Gets all face properties from the tracked face in front of
+        the robot.
+
+        It tracks:
+        - Emotions (neutral, happy, surprised, angry and sad
+        - Age
+        - Gender
+
+        .. note:: It also have a feature that it substracts a 5 year if it talks to a female.
+
+        .. note:: If it cannot decide which gender the user is, it just greets her/him as "Hello human being"
+        """
+        emotions = ["neutral", "happy", "surprised", "angry", "sad"]
+        face_id = self.memory_service.getData("PeoplePerception/PeopleList")
+        recognized = self.face_characteristic.analyzeFaceCharacteristics(face_id[0])
+        if recognized:
+            properties = self.memory_service.getData("PeoplePerception/Person/" + str(face_id[0]) + "/ExpressionProperties")
+            gender = self.memory_service.getData("PeoplePerception/Person/" + str(face_id[0]) + "/GenderProperties")
+            age = self.memory_service.getData("PeoplePerception/Person/" + str(face_id[0]) + "/AgeProperties")
+
+            # Gender properties
+            if gender[1] > 0.4:
+                if gender[0] == 0:
+                    self.say("Hello lady!")
+                elif gender[0] == 1:
+                    self.say("Hello sir!")
+            else:
+                self.say("Hello human being!")
+
+            # Age properties
+            if gender[1] == 1:
+                self.say("You are " + str(int(age[0])) + " years old.")
+            else:
+                self.say("You look like " + str(int(age[0])) + " oops, I mean " + str(int(age[0]-5)))
+
+            # Emotion properties
+            emotion_index = (properties.index(max(properties)))
+
+            if emotion_index > 0.5:
+                self.say("I am quite sure your mood is " + emotions[emotion_index])
+            else:
+                self.say("I guess your mood is " + emotions[emotion_index])
 
 
 class VirtualPepper:

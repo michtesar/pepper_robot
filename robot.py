@@ -763,11 +763,11 @@ class Pepper:
         self.speech_service.setLanguage("English")
         self.speech_service.pause(True)
         try:
-            self.speech_service.setVocabulary(vocabulary, False)
+            self.speech_service.setVocabulary(vocabulary, True)
         except RuntimeError as error:
             print(error)
             self.speech_service.removeAllContext()
-            self.speech_service.setVocabulary(vocabulary, False)
+            self.speech_service.setVocabulary(vocabulary, True)
             self.speech_service.subscribe("Test_ASR")
         try:
             print("[INFO]: Robot is listening to you...")
@@ -775,10 +775,8 @@ class Pepper:
             time.sleep(4)
             words = self.memory_service.getData("WordRecognized")
             print(words[0])
-        except Exception as error:
-            print(error)
-        finally:
-            self.speech_service.unsubscribe("Test_ASR")
+        except:
+            pass
 
     def listen(self):
         self.dialog_service.setLanguage("English")

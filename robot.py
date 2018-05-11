@@ -44,7 +44,7 @@ class Pepper:
         self.motion_service = self.session.service("ALMotion")
         self.tracker_service = self.session.service("ALTracker")
         self.tts_service = self.session.service("ALAnimatedSpeech")
-        #self.tablet_service = self.session.service("ALTabletService")
+        self.tablet_service = self.session.service("ALTabletService")
         self.autonomous_life_service = self.session.service("ALAutonomousLife")
         self.system_service = self.session.service("ALSystem")
         self.navigation_service = self.session.service("ALNavigation")
@@ -60,6 +60,8 @@ class Pepper:
         self.behavior_service = self.session.service("ALBehaviorManager")
         self.face_characteristic = self.session.service("ALFaceCharacteristics")
         self.people_perception = self.session.service("ALPeoplePerception")
+        self.speech_service = self.session.service("ALSpeechRecognition")
+        self.dialog_service = self.session.service("ALDialog")
 
         self.slam_map = None
         self.localization = None
@@ -750,6 +752,50 @@ class Pepper:
                 self.say("I am quite sure your mood is " + emotions[emotion_index])
             else:
                 self.say("I guess your mood is " + emotions[emotion_index])
+
+    def listen_to(self, vocabulary):
+        """
+        vocabulary = ["what color is the sky", "yes", "no"]
+        :param vocabulary:
+        :return:
+        """
+        # TODO: Return the word which was recognized
+        self.speech_service.setLanguage("English")
+        self.speech_service.pause(True)
+        try:
+            self.speech_service.setVocabulary(vocabulary, False)
+        except RuntimeError as error:
+            print(error)
+            self.speech_service.removeAllContext()
+            self.speech_service.setVocabulary(vocabulary, False)
+            self.speech_service.subscribe("Test_ASR")
+        try:
+            print("[INFO]: Robot is listening to you...")
+            self.speech_service.pause(False)
+            time.sleep(4)
+            words = self.memory_service.getData("WordRecognized")
+            print(words[0])
+        except Exception as error:
+            print(error)
+        finally:
+            self.speech_service.unsubscribe("Test_ASR")
+
+    def listen(self):
+        self.dialog_service.setLanguage("English")
+        topic_content = ("topic: ~wildcard_topic()\n"
+                        "language: enu\n"
+                        "u:(_*)\n")
+        self.dialog_service.loadTopicContent(topic_content)
+        self.dialog_service.subscribe("wildcard_dialog")
+
+        words = self.memory_service.getData("WordRecognized")
+        print words[0]
+
+        self.dialog_service.unsubscribe("wildcard_dialog")
+
+    def human_is_speaking(self):
+        speaking = self.memory_service.getData("ALSpeechRecognition/Status")
+        return speaking
 
 
 class VirtualPepper:

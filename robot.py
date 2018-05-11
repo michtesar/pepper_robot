@@ -10,7 +10,7 @@ It also includes a virtual robot for testing purposes.
 """
 try:
     import qi
-except ImportError:
+except:
     print("Cannot import QI")
 import time
 import numpy

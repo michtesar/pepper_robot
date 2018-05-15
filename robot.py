@@ -550,7 +550,7 @@ class Pepper:
 
     def move_head_down(self):
         """Look down"""
-        self.motion_service.setAngles("HeadPitch", 0.4, 0.2)
+        self.motion_service.setAngles("HeadPitch", 0.46, 0.2)
 
     def move_head_up(self):
         """Look up"""
@@ -708,7 +708,10 @@ class Pepper:
         """
         # TODO: Add some elegant method to kill a port if previously opened
         subprocess.Popen(["cd", folder])
-        subprocess.Popen(["python", "-m", "SimpleHTTPServer"])
+        try:
+            subprocess.Popen(["python", "-m", "SimpleHTTPServer"])
+        except Exception as error:
+            subprocess.Popen(["python", "-m", "SimpleHTTPServer"])
         print("[INFO]: HTTPS server successfully started")
 
     def play_sound(self, sound):
@@ -886,6 +889,8 @@ class Pepper:
         :rtype: string
         """
         name = self.system_service.robotName()
+        if name:
+            self.say("My name is " + name)
         return name
 
 

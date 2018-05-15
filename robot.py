@@ -8,7 +8,7 @@ recognition.
 
 It also includes a virtual robot for testing purposes.
 """
-import qi
+#import qi
 import time
 import numpy
 import cv2
@@ -342,6 +342,7 @@ class Pepper:
         robots always need to run a self localization. Even some movement in \
         cartesian space demands localization.
         """
+        # TODO: There should be localizeInMap() with proper coordinates
         try:
             self.navigation_service.startLocalization()
             localization = self.navigation_service.getRobotPositionInMap()
@@ -867,9 +868,19 @@ class Pepper:
         :return: Speech to text
         :rtype: string
         """
+
+        self.dialog_service.setLanguage("English")
+        topic_content = ("topic: ~mytopic()\n"
+                        "language: enu\n"
+                        "u:(_*)\n")
+        topic_name = self.dialog_service.loadTopicContent(topic_content)
+
         print("[INFO]: Robot is listening to you...")
         time.sleep(5)
         words = self.memory_service.getData("WordRecognized")
+
+        self.dialog_service.unloadTopic(topic_name)
+
         print("[INFO]: Robot understood: '" + words[0] + "'")
         return words[0]
 

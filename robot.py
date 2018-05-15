@@ -152,9 +152,11 @@ class Pepper:
         :param url: Web URL
         :type  url: string
         """
-        self.tablet_service.turnScreenOn(True)
-        self.tablet_service.showWebview()
-        self.tablet_service.loadUrl(url)
+        self.tablet_service.showWebview(url)
+
+    def clean_tablet(self):
+        """Clean tablet and show default tablet animation on robot"""
+        self.tablet_service.hideWebview()
 
     def tablet_show_image(self, image_url):
         """

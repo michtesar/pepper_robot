@@ -870,7 +870,7 @@ class Pepper:
         print("[INFO]: Robot understood: '" + words[0] + "'")
         return words[0]
 
-    def change_robot_name(self):
+    def rename_robot(self):
         """Change current name of the robot"""
         choice = raw_input("Are you sure you would like to rename a robot? (yes/no)\n")
         if choice == "yes":

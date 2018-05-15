@@ -752,7 +752,7 @@ class Pepper:
         """
         Start a robotic dance
         """
-        self.play_sound("/home/nao/song.mp3")
+        #self.play_sound("/home/nao/song.mp3")
         dance.dance(self.motion_service)
 
     def start_behavior(self, behavior):
@@ -869,6 +869,14 @@ class Pepper:
         words = self.memory_service.getData("WordRecognized")
         print("[INFO]: Robot understood: '" + words[0] + "'")
         return words[0]
+
+    def change_robot_name(self):
+        """Change current name of the robot"""
+        choice = raw_input("Are you sure you would like to rename a robot? (yes/no)")
+        if choice == "yes":
+            new_name = raw_input("Enter a new name for the robot. Then it will reboot itself.")
+            self.system_service.setRobotName(new_name)
+            self.restart_robot()
 
 
 class VirtualPepper:

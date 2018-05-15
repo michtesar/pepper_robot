@@ -872,9 +872,9 @@ class Pepper:
 
     def change_robot_name(self):
         """Change current name of the robot"""
-        choice = raw_input("Are you sure you would like to rename a robot? (yes/no)")
+        choice = raw_input("Are you sure you would like to rename a robot? (yes/no)\n")
         if choice == "yes":
-            new_name = raw_input("Enter a new name for the robot. Then it will reboot itself.")
+            new_name = raw_input("Enter a new name for the robot. Then it will reboot itself.\nName: ")
             self.system_service.setRobotName(new_name)
             self.restart_robot()
 

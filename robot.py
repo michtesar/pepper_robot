@@ -478,6 +478,17 @@ class Pepper:
         return image
 
     def get_depth_frame(self, show):
+        """
+        Get depth frame from subscribed camera link.
+
+        .. warning:: Please subscribe to camera before getting a camera frame. After \
+        you don't need it unsubscribe it.
+
+        :param show: Show image when recieved and wait for `ESC`
+        :type show: bool
+        :return: image
+        :rtype: cv2 image
+        """
         image_raw = self.camera_device.getImageRemote(self.camera_link)
         image = numpy.frombuffer(image_raw[6], numpy.uint8).reshape(image_raw[1], image_raw[0], 3)
 

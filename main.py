@@ -1,7 +1,12 @@
 from robot import *
-#import time
+import cv2
+import time
 
 pepper = Pepper("10.37.1.227")
+
+pepper.subscribe_camera("camera_depth", 3, 30)
+pepper.get_depth_frame(True)
+pepper.unsubscribe_camera()
 
 
 """

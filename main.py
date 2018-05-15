@@ -1,8 +1,10 @@
 from robot import *
-import time
+#import time
 
-pepper = Pepper("paprika.local")
+pepper = Pepper("10.37.1.227")
 
+
+"""
 print("[PIPELINE]: Setting the robot")
 pepper.set_volume(50)
 pepper.set_security_distance(0.01)
@@ -27,7 +29,9 @@ pepper.pick_a_volunteer()
 pepper.get_face_properties()
 
 print("[PIPELINE]: Play sound")
+pepper.tablet_show_image("https://goo.gl/4Xq6Bc")
 pepper.start_dance()
 pepper.play_sound("/home/nao/song.mp3")
 time.sleep(20)
 pepper.stop_sound()
+"""

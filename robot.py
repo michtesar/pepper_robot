@@ -530,8 +530,11 @@ class Pepper:
         >>> pepper.blink_eyes([255, 0, 0])
 
         """
-        # TODO: Not sure if it is RGB or BGR
         self.led_service.fadeRGB('AllLeds', rgb[0], rgb[1], rgb[2], 1.0)
+
+    def turn_off_leds(self):
+        """Turn off the LEDs in robot's eyes"""
+        self.blink_eyes([0, 0, 0])
 
     def navigate_to(self, x, y):
         """

@@ -1,8 +1,8 @@
 from robot import Pepper
 import cv2
 
-pepper = Pepper("paprika.local")
-pepper.set_security_distance(0.5)
+pepper = Pepper("10.37.1.227")
+pepper.set_security_distance(0.01)
 
 image = cv2.imread("src/keyboard.png")
 height, width = image.shape[:2]

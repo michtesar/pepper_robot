@@ -752,6 +752,7 @@ class Pepper:
         """
         Start a robotic dance
         """
+        self.play_sound("/home/nao/song.mp3")
         dance.dance(self.motion_service)
 
     def start_behavior(self, behavior):

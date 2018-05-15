@@ -407,7 +407,8 @@ class Pepper:
     def subscribe_camera(self, camera, resolution, fps):
         """
         Subscribe to a camera service. You need to subscribe a camera
-        before you reach a images from it.
+        before you reach a images from it. If you choose `depth_camera`
+        only 320x240 resolution is enabled.
 
         .. warning:: Each subscription has to have a unique name \
         otherwise it will conflict it and you will not be able to \
@@ -419,7 +420,7 @@ class Pepper:
         >>> image = pepper.get_camera_frame(False)
         >>> pepper.unsubscribe_camera()
 
-        :param camera: `camera_top` or `camera_bottom`
+        :param camera: `camera_depth`, `camera_top` or `camera_bottom`
         :type camera: string
         :param resolution:
             0. 160x120
@@ -430,14 +431,20 @@ class Pepper:
         :param fps: Frames per sec (5, 10, 15 or 30)
         :type fps: integer
         """
+        color_space = 13
+
         camera_index = None
         if camera == "camera_top":
             camera_index = 0
         elif camera == "camera_bottom":
             camera_index = 1
+        elif camera == "camera_depth":
+            camera_index = 2
+            resolution = 1
+            color_space = 11
 
         self.camera_link = self.camera_device.subscribeCamera("Camera_Stream" + str(numpy.random.random()),
-                                                              camera_index, resolution, 13, fps)
+                                                              camera_index, resolution, color_space, fps)
         if self.camera_link:
             print("[INFO]: Camera is initialized")
         else:
@@ -460,6 +467,17 @@ class Pepper:
         :return: image
         :rtype: cv2 image
         """
+        image_raw = self.camera_device.getImageRemote(self.camera_link)
+        image = numpy.frombuffer(image_raw[6], numpy.uint8).reshape(image_raw[1], image_raw[0], 3)
+
+        if show:
+            cv2.imshow("Pepper Camera", image)
+            cv2.waitKey(-1)
+            cv2.destroyAllWindows()
+
+        return image
+
+    def get_depth_frame(self, show):
         image_raw = self.camera_device.getImageRemote(self.camera_link)
         image = numpy.frombuffer(image_raw[6], numpy.uint8).reshape(image_raw[1], image_raw[0], 3)
 

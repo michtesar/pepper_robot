@@ -17,6 +17,7 @@ import gtts
 import playsound
 import subprocess
 import dance
+import socket
 
 
 class Pepper:
@@ -435,7 +436,7 @@ class Pepper:
         elif camera == "camera_bottom":
             camera_index = 1
 
-        self.camera_link = self.camera_device.subscribeCamera("Camera_Stream" + str(numpy.random),
+        self.camera_link = self.camera_device.subscribeCamera("Camera_Stream" + str(numpy.random.random()),
                                                               camera_index, resolution, 13, fps)
         if self.camera_link:
             print("[INFO]: Camera is initialized")
@@ -468,6 +469,38 @@ class Pepper:
             cv2.destroyAllWindows()
 
         return image
+
+    def show_tablet_camera(self, text):
+        """
+        Show image from camera with SpeechToText annotation on the robot tablet
+
+        .. note:: For showing image on robot you will need to share a location via HTTPS and \
+        save the image to ./tmp.
+
+        .. warning:: It has to be some camera subscribed and ./tmp folder in root directory \
+        exists for showing it on the robot.
+
+        :Example:
+
+        >>> pepper = Pepper("10.37.1.227")
+        >>> pepper.share_localhost("/Users/michael/Desktop/Pepper/tmp/")
+        >>> pepper.subscribe_camera("camera_top", 2, 30)
+        >>> while True:
+        >>>     pepper.show_tablet_camera("camera top")
+        >>>     pepper.tablet_show_web("http://10.37.2.241:8000/tmp/camera.png")
+
+        :param text: Question of the visual question answering
+        :type text: string
+        """
+        remote_ip = socket.gethostbyname(socket.gethostname())
+        image_raw = self.camera_device.getImageRemote(self.camera_link)
+        image = numpy.frombuffer(image_raw[6], numpy.uint8).reshape(image_raw[1], image_raw[0], 3)
+        image = cv2.resize(image, (800, 600))
+        cv2.putText(image, "Visual question answering", (30, 500), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+        cv2.putText(image, "Question: " + text, (30, 550), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        cv2.imwrite("./tmp/camera.png", image)
+
+        self.tablet_show_web("http://" + remote_ip + ":8000/tmp/camera.png")
 
     def set_security_distance(self, distance=0.05):
         """

@@ -1,5 +1,3 @@
-from naoqi import ALProxy
-
 def dance(motion_service):
     names = list()
     times = list()
@@ -73,7 +71,4 @@ def dance(motion_service):
     times.append([0.68, 1.52, 2.36, 3.32, 4.16, 5.08, 5.92, 6.88, 7.72, 8.52, 8.84, 9.68, 10.64, 11.48, 12.4, 13.24, 14.2, 15.04, 16.24, 16.44])
     keys.append([-0.401949, 0.107338, 0.400331, 0.107338, 0.400331, 0.107338, 0.400331, 0.107338, 0.400331, 0.391888, 0.395814, 0.420357, 0.395814, 0.420357, 0.395814, 0.420357, 0.395814, 0.420357, 0.00501826, 0.108872])
 
-    try:
-      motion_service.angleInterpolation(names, keys, times, True)
-    except BaseException, err:
-      print err
+    motion_service.angleInterpolation(names, keys, times, True)

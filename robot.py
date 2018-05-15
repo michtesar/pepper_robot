@@ -878,6 +878,16 @@ class Pepper:
             self.system_service.setRobotName(new_name)
             self.restart_robot()
 
+    def get_robot_name(self):
+        """
+        Gets a current name of the robot
+
+        :return: Name of the robot
+        :rtype: string
+        """
+        name = self.system_service.robotName()
+        return name
+
 
 class VirtualPepper:
     """Virtual robot for testing"""

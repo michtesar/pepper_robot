@@ -8,7 +8,7 @@ recognition.
 
 It also includes a virtual robot for testing purposes.
 """
-#import qi
+import qi
 import time
 import numpy
 import cv2

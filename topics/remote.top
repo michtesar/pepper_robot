@@ -1,0 +1,8 @@
+topic: ~remote_topic()
+language: enu
+
+
+u: ([hello hi]) ^random(hello greetings howdy)
+u: ([turn go rotate spin] right) ^pCall(ALMemory.raiseEvent("turn_right_event", "3"))
+u: (my name is _*) nice to meet you $1 $name=$1
+u: ([what is _*]) ^pCall(searchWiki($1)

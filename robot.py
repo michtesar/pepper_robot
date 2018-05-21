@@ -787,6 +787,9 @@ class Pepper:
         .. note:: It also have a feature that it substracts a 5 year if it talks to a female.
 
         .. note:: If it cannot decide which gender the user is, it just greets her/him as "Hello human being"
+
+        ..warning:: To get this feature working `ALAutonomousLife` process is needed. In this methods it is \
+        called by default
         """
         self.autonomous_life_on()
         emotions = ["neutral", "happy", "surprised", "angry", "sad"]

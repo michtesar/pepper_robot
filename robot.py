@@ -666,13 +666,13 @@ class Pepper:
 
         while not volunteer_found:
             wait = numpy.random.randint(500, 1500) / 1000
-            theta = numpy.random.randint(-5, 5)
+            theta = numpy.random.randint(-10, 10)
             self.turn_around(theta)
             time.sleep(wait)
             self.stop_moving()
             self.stand()
             self.face_detection_service.subscribe(proxy_name, 500, 0.0)
-            for memory in range(2):
+            for memory in range(5):
                 time.sleep(0.5)
                 output = self.memory_service.getData("FaceDetected")
                 print("...")
@@ -682,16 +682,18 @@ class Pepper:
 
         self.say("I found a volunteer! It is you!")
         self.stand()
-        self.tracker_service.registerTarget("Face", 0.15)
-        self.tracker_service.setMode("Move")
-        self.tracker_service.track("Face")
-        self.tracker_service.setEffector("RArm")
+        try:
+            self.tracker_service.registerTarget("Face", 0.15)
+            self.tracker_service.setMode("Move")
+            self.tracker_service.track("Face")
+            self.tracker_service.setEffector("RArm")
+            self.get_face_properties()
 
-        time.sleep(2)
-
-        self.unsubscribe_effector()
-        self.stand()
-        self.face_detection_service.unsubscribe(proxy_name)
+        finally:
+            time.sleep(2)
+            self.unsubscribe_effector()
+            self.stand()
+            self.face_detection_service.unsubscribe(proxy_name)
 
     @staticmethod
     def share_localhost(folder):
@@ -786,9 +788,16 @@ class Pepper:
 
         .. note:: If it cannot decide which gender the user is, it just greets her/him as "Hello human being"
         """
+        self.autonomous_life_on()
         emotions = ["neutral", "happy", "surprised", "angry", "sad"]
         face_id = self.memory_service.getData("PeoplePerception/PeopleList")
-        recognized = self.face_characteristic.analyzeFaceCharacteristics(face_id[0])
+        recognized = None
+        try:
+            recognized = self.face_characteristic.analyzeFaceCharacteristics(face_id[0])
+        except Exception as error:
+            print("[ERROR]: Cannot find a face to analyze.")
+            self.say("I cannot recognize a face.")
+
         if recognized:
             properties = self.memory_service.getData("PeoplePerception/Person/" + str(face_id[0]) + "/ExpressionProperties")
             gender = self.memory_service.getData("PeoplePerception/Person/" + str(face_id[0]) + "/GenderProperties")

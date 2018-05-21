@@ -1,5 +1,4 @@
 from robot import *
-import time
 
 pepper = Pepper("10.37.1.227")
 

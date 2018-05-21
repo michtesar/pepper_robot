@@ -12,11 +12,8 @@ pepper.start_animation("Hey_1")
 
 print("[PIPELINE]: Pick a volunteer")
 pepper.pick_a_volunteer()
+pepper.say("Look at me please")
 pepper.get_face_properties()
 
 print("[PIPELINE]: Play sound")
 pepper.tablet_show_image("https://goo.gl/4Xq6Bc")
-pepper.play_sound("/home/nao/song.mp3")
-pepper.start_dance()
-time.sleep(20)
-pepper.stop_sound()

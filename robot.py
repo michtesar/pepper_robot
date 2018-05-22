@@ -18,6 +18,9 @@ import playsound
 import subprocess
 import dance
 import socket
+from paramiko import SSHClient
+from scp import SCPClient
+import tools
 
 
 class Pepper:
@@ -42,6 +45,14 @@ class Pepper:
         self.session = qi.Session()
         self.session.connect("tcp://" + ip_address + ":" + str(port))
 
+        self.ip_address = ip_address
+        self.port = port
+
+        ssh = SSHClient()
+        ssh.load_system_host_keys()
+        ssh.connect(hostname=self.ip_address, username="nao", password="nao")
+        self.scp = SCPClient(ssh.get_transport())
+
         self.posture_service = self.session.service("ALRobotPosture")
         self.motion_service = self.session.service("ALMotion")
         self.tracker_service = self.session.service("ALTracker")
@@ -64,10 +75,13 @@ class Pepper:
         self.people_perception = self.session.service("ALPeoplePerception")
         self.speech_service = self.session.service("ALSpeechRecognition")
         self.dialog_service = self.session.service("ALDialog")
+        self.audio_recorder = self.session.service("ALAudioRecorder")
 
         self.slam_map = None
         self.localization = None
         self.camera_link = None
+
+        self.recognizer = speech_recognition.Recognizer()
 
         print("[INFO]: Robot is initialized at " + ip_address + ":" + str(port))
 
@@ -880,21 +894,35 @@ class Pepper:
         :return: Speech to text
         :rtype: string
         """
+        self.speech_service.setAudioExpression(False)
+        self.speech_service.setVisualExpression(False)
+        self.audio_recorder.stopMicrophonesRecording()
+        print("[INFO]: Speech recognition is in progress. Say something.")
+        while True:
+            if self.memory_service.getData("ALSpeechRecognition/Status") == "SpeechDetected":
+                self.audio_recorder.startMicrophonesRecording("/home/nao/speech.wav", "wav", 48000, (0, 0, 1, 0))
+                print("[INFO]: Robot is listening to you")
+                self.blink_eyes([255, 255, 0])
+                break
 
-        self.dialog_service.setLanguage("English")
-        topic_content = ("topic: ~mytopic()\n"
-                        "language: enu\n"
-                        "u:(_*)\n")
-        topic_name = self.dialog_service.loadTopicContent(topic_content)
+        while True:
+            if self.memory_service.getData("ALSpeechRecognition/Status") == "EndOfProcess":
+                self.audio_recorder.stopMicrophonesRecording()
+                print("[INFO]: Robot is not listening to you")
+                self.blink_eyes([0, 0, 0])
+                break
 
-        print("[INFO]: Robot is listening to you...")
-        time.sleep(5)
-        words = self.memory_service.getData("WordRecognized")
+        self.download_file("speech.wav")
+        self.speech_service.setAudioExpression(False)
+        self.speech_service.setVisualExpression(False)
 
-        self.dialog_service.unloadTopic(topic_name)
+        return self.speech_to_text("speech.wav")
 
-        print("[INFO]: Robot understood: '" + words[0] + "'")
-        return words[0]
+    def ask_wikipedia(self):
+        question = self.listen()
+        answer = tools.get_knowledge(question)
+
+        return answer
 
     def rename_robot(self):
         """Change current name of the robot"""
@@ -903,6 +931,23 @@ class Pepper:
             new_name = raw_input("Enter a new name for the robot. Then it will reboot itself.\nName: ")
             self.system_service.setRobotName(new_name)
             self.restart_robot()
+
+    def upload_file(self, file_name):
+        self.scp.put(file_name)
+        print("[INFO]: File " + file_name + " uploaded")
+        self.scp.close()
+
+    def download_file(self, file_name):
+        self.scp.get(file_name, local_path="./tmp/")
+        print("[INFO]: File " + file_name + " downloaded")
+        self.scp.close()
+
+    def speech_to_text(self, audio_file):
+        audio_file = speech_recognition.AudioFile("./tmp/" + audio_file)
+        with audio_file as source:
+            audio = self.recognizer.record(source)
+            recognized = self.recognizer.recognize_google(audio, language="en_US")
+        return recognized
 
     def get_robot_name(self):
         """

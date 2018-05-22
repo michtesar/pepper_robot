@@ -2,6 +2,11 @@ from robot import *
 
 pepper = Pepper("10.37.1.227")
 
+pepper.set_volume(50)
+answer = pepper.ask_wikipedia()
+pepper.say(answer)
+
+"""
 print("[PIPELINE]: Setting the robot")
 pepper.set_awareness(False)
 pepper.set_volume(50)
@@ -16,3 +21,4 @@ pepper.get_face_properties()
 
 print("[PIPELINE]: Play sound")
 pepper.tablet_show_image("https://goo.gl/4Xq6Bc")
+"""

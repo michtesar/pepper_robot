@@ -1,10 +1,21 @@
 from robot import *
+from time import sleep
+
 
 pepper = Pepper("10.37.1.227")
+pepper.hand("right", True)
 
-pepper.set_volume(50)
-answer = pepper.ask_wikipedia()
-pepper.say(answer)
+
+"""
+pepper = Pepper("10.37.1.227")
+
+pepper.say("Give me a question")
+try:
+    answer = pepper.ask_wikipedia()
+    pepper.say(answer)
+except:
+    pepper.say("I am not sure what to say")
+"""
 
 """
 print("[PIPELINE]: Setting the robot")

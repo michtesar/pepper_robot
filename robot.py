@@ -961,6 +961,23 @@ class Pepper:
             self.say("My name is " + name)
         return name
 
+    def hand(self, hand, close):
+        hand_id = None
+        if hand == "left":
+            hand_id = "LHand"
+        elif hand == "right":
+            hand_id = "RHand"
+
+        if hand_id:
+            if close:
+                self.motion_service.setAngles(hand_id, 0.0, 0.2)
+                print("[INFO]: Hand " + hand + "is closed")
+            else:
+                self.motion_service.setAngles(hand_id, 1.0, 0.2)
+                print("[INFO]: Hand " + hand + "is opened")
+        else:
+            print("[INFO]: Cannot move a hand")
+
 
 class VirtualPepper:
     """Virtual robot for testing"""

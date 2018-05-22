@@ -18,7 +18,7 @@ import playsound
 import subprocess
 import dance
 import socket
-from paramiko import SSHClient
+import paramiko
 from scp import SCPClient
 import tools
 
@@ -48,7 +48,8 @@ class Pepper:
         self.ip_address = ip_address
         self.port = port
 
-        ssh = SSHClient()
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.load_system_host_keys()
         ssh.connect(hostname=self.ip_address, username="nao", password="nao")
         self.scp = SCPClient(ssh.get_transport())

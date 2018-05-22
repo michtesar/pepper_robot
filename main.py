@@ -5,19 +5,13 @@ from time import sleep
 pepper = Pepper("10.37.1.227")
 pepper.hand("right", True)
 
-
-"""
-pepper = Pepper("10.37.1.227")
-
 pepper.say("Give me a question")
 try:
     answer = pepper.ask_wikipedia()
     pepper.say(answer)
 except:
     pepper.say("I am not sure what to say")
-"""
 
-"""
 print("[PIPELINE]: Setting the robot")
 pepper.set_awareness(False)
 pepper.set_volume(50)
@@ -32,4 +26,3 @@ pepper.get_face_properties()
 
 print("[PIPELINE]: Play sound")
 pepper.tablet_show_image("https://goo.gl/4Xq6Bc")
-"""

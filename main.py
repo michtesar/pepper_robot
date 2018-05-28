@@ -2,15 +2,18 @@ from robot import *
 from time import sleep
 
 
-pepper = Pepper("10.37.1.227")
+pepper = Pepper("192.168.0.101")
 pepper.hand("right", True)
 
-pepper.say("Give me a question")
-try:
-    answer = pepper.ask_wikipedia()
-    pepper.say(answer)
-except:
-    pepper.say("I am not sure what to say")
+while True:
+    pepper.say("Give me a question")
+    try:
+        print(pepper.listen())
+        #answer = pepper.ask_wikipedia()
+        #pepper.say(answer)
+    except Exception as error:
+        print(error)
+        pepper.say("I am not sure what to say")
 
 print("[PIPELINE]: Setting the robot")
 pepper.set_awareness(False)

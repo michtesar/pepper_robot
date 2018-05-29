@@ -1,9 +1,10 @@
 from robot import *
-from time import sleep
+import ConfigParser
 
+config = ConfigParser.ConfigParser()
+config.read("config.ini")
 
-pepper = Pepper("192.168.0.101")
-pepper.set_volume(45)
+pepper = Pepper(config.get("DEFAULT", "IP_ADDRESS"))
 
 while True:
     pepper.say("Give me a question")

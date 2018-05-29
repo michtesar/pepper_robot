@@ -4,7 +4,7 @@ import robot
 import sys
 import subprocess
 import time
-import os
+import ConfigParser
 
 pygame.init()
 j = pygame.joystick.Joystick(0)
@@ -19,6 +19,9 @@ right_y = 0
 left_trigger = 0
 right_trigger = 0
 
+config = ConfigParser.ConfigParser()
+config.read("config.ini")
+
 button_names = ["A", "B", "X", "Y", "LB", "RB", "BACK", "START", "MENU", "Left", "Right"]
 menu = ["battery status", "pick a volunteer", "dance", "ask wikipedia", "blink my eyes", "show website",
         "show image", "rest", "get face properties", "about me"]
@@ -31,7 +34,7 @@ menu_items = len(menu)
 hat = None
 button = 0
 
-pepper = robot.Pepper("192.168.0.101")
+pepper = robot.Pepper(config.get("DEFAULT", "IP_ADDRESS"))
 pepper.set_security_distance(0.01)
 
 

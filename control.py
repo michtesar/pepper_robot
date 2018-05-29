@@ -7,6 +7,10 @@ import random
 import argparse
 from PIL import Image
 import wikipedia
+import ConfigParser
+
+config = ConfigParser.ConfigParser()
+config.read("config.ini")
 
 
 # ==============================================================================
@@ -399,7 +403,7 @@ class RemoteVoice(object):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ip", type=str, default="10.37.1.227",
+    parser.add_argument("--ip", type=str, default=config.get("DEFAULT", "IP_ADDRESS"),
                         help="Robot IP address. On robot or Local Naoqi: use \
                         '127.0.0.1'.")
     parser.add_argument("--port", type=int, default=9559,

@@ -1,7 +1,11 @@
 from robot import Pepper
 import cv2
+import ConfigParser
 
-pepper = Pepper("192.168.0.101")
+config = ConfigParser.ConfigParser()
+config.read("config.ini")
+
+pepper = Pepper(config.get("DEFAULT", "IP_ADDRESS"))
 pepper.subscribe_camera("camera_top", 2, 30)
 
 while True:

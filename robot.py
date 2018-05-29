@@ -900,6 +900,7 @@ class Pepper:
         self.audio_recorder.stopMicrophonesRecording()
         print("[INFO]: Speech recognition is in progress. Say something.")
         while True:
+            print(self.memory_service.getData("ALSpeechRecognition/Status"))
             if self.memory_service.getData("ALSpeechRecognition/Status") == "SpeechDetected":
                 self.audio_recorder.startMicrophonesRecording("/home/nao/speech.wav", "wav", 48000, (0, 0, 1, 0))
                 print("[INFO]: Robot is listening to you")
@@ -914,16 +915,23 @@ class Pepper:
                 break
 
         self.download_file("speech.wav")
-        self.speech_service.setAudioExpression(False)
-        self.speech_service.setVisualExpression(False)
+        self.speech_service.setAudioExpression(True)
+        self.speech_service.setVisualExpression(True)
 
         return self.speech_to_text("speech.wav")
 
     def ask_wikipedia(self):
+        self.speech_service.setAudioExpression(False)
+        self.speech_service.setVisualExpression(False)
+        self.set_awareness(False)
+        self.say("Give me a question")
         question = self.listen()
+        self.say("I will tell you")
         answer = tools.get_knowledge(question)
-
-        return answer
+        self.say(answer)
+        self.set_awareness(True)
+        self.speech_service.setAudioExpression(True)
+        self.speech_service.setVisualExpression(True)
 
     def rename_robot(self):
         """Change current name of the robot"""
@@ -939,12 +947,12 @@ class Pepper:
         self.scp.close()
 
     def download_file(self, file_name):
-        self.scp.get(file_name, local_path="./tmp/")
+        self.scp.get(file_name, local_path="/tmp/")
         print("[INFO]: File " + file_name + " downloaded")
         self.scp.close()
 
     def speech_to_text(self, audio_file):
-        audio_file = speech_recognition.AudioFile("./tmp/" + audio_file)
+        audio_file = speech_recognition.AudioFile("/tmp/" + audio_file)
         with audio_file as source:
             audio = self.recognizer.record(source)
             recognized = self.recognizer.recognize_google(audio, language="en_US")
@@ -978,6 +986,19 @@ class Pepper:
                 print("[INFO]: Hand " + hand + "is opened")
         else:
             print("[INFO]: Cannot move a hand")
+
+    def chatbot(self):
+        tools.chatbot_init()
+        while True:
+            try:
+                self.set_awareness(False)
+                question = self.listen()
+                print("[USER]: " + question)
+                answer = tools.chatbot_ask(question)
+                print("[ROBOT]: "+ answer)
+                self.say(answer)
+            except KeyboardInterrupt:
+                self.set_awareness(True)
 
 
 class VirtualPepper:

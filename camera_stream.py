@@ -1,7 +1,7 @@
 from robot import Pepper
 import cv2
 
-pepper = Pepper("10.37.1.227")
+pepper = Pepper("192.168.0.101")
 pepper.subscribe_camera("camera_top", 2, 30)
 
 while True:

@@ -920,6 +920,11 @@ class Pepper:
         return self.speech_to_text("speech.wav")
 
     def ask_wikipedia(self):
+        """
+        Ask for question and then robot will say first two sentences from Wikipedia
+
+        ..warning:: Autonomous life has to be turned on to process audio
+        """
         self.speech_service.setAudioExpression(False)
         self.speech_service.setVisualExpression(False)
         self.set_awareness(False)
@@ -941,16 +946,37 @@ class Pepper:
             self.restart_robot()
 
     def upload_file(self, file_name):
+        """
+        Upload file to the home directory of the robot
+
+        :param file_name: File name with extension (or path)
+        :type file_name: string
+        """
         self.scp.put(file_name)
         print("[INFO]: File " + file_name + " uploaded")
         self.scp.close()
 
     def download_file(self, file_name):
+        """
+        Download a file from robot to ./tmp folder in root.
+
+        ..warning:: Folder ./tmp has to exist!
+        :param file_name: File name with extension (or path)
+        :type file_name: string
+        """
         self.scp.get(file_name, local_path="/tmp/")
         print("[INFO]: File " + file_name + " downloaded")
         self.scp.close()
 
     def speech_to_text(self, audio_file):
+        """
+        Translate speech to text via Google Speech API
+
+        :param audio_file: Name of the audio (default `speech.wav`
+        :type audio_file: string
+        :return: Text of the speech
+        :rtype: string
+        """
         audio_file = speech_recognition.AudioFile("/tmp/" + audio_file)
         with audio_file as source:
             audio = self.recognizer.record(source)
@@ -970,6 +996,16 @@ class Pepper:
         return name
 
     def hand(self, hand, close):
+        """
+        Close or open hand
+
+        :param hand: Which hand
+            - left
+            - right
+        :type hand: string
+        :param close: True if close, false if open
+        :type close: boolean
+        """
         hand_id = None
         if hand == "left":
             hand_id = "LHand"
@@ -987,6 +1023,11 @@ class Pepper:
             print("[INFO]: Cannot move a hand")
 
     def chatbot(self):
+        """
+        Run chatbot with text to speech and speech to text
+
+        ..warning:: This is not currently working
+        """
         tools.chatbot_init()
         while True:
             try:

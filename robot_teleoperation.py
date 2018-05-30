@@ -26,7 +26,7 @@ menu = ["battery status", "pick a volunteer", "dance", "ask wikipedia", "blink m
 menu_functions = ["pepper.battery_status()", "pepper.pick_a_volunteer()", "pepper.start_dance()",
                   "pepper.ask_wikipedia()", "blink_eyes()", "pepper.tablet_show_web('https://www.ciirc.cvut.cz')",
                   "pepper.tablet_show_image('https://goo.gl/4Xq6Bc')", "pepper.rest()",
-                  "pepper.get_face_properties()", "pepper.say('My name is Cinnamon. I am circ robot')"]
+                  "pepper.get_face_properties()", "pepper.say('My name is Cinnamon. I am circ robot. I was designed as social robot by Softbanks robotics. At circ my colegues Gabriela, Michael and Michal develop artificial intelligence on me. They will show you. Luckily.')"]
 menu_index = -1
 menu_items = len(menu)
 hat = None
@@ -125,14 +125,14 @@ try:
                     pepper.start_animation(random.choice(animation))
                     pepper.stand()
                 elif button == "LB":
-                    s = subprocess.Popen([sys.executable, '-c', 'from robot import Pepper; pepper = Pepper("192.168.0.101"); pepper.play_sound("/home/nao/song.mp3")'],
+                    s = subprocess.Popen([sys.executable, '-c', 'from robot import Pepper; pepper = Pepper("192.168.8.101"); pepper.play_sound("/home/nao/song.mp3")'],
                                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                     d = subprocess.Popen([sys.executable, '-c',
-                                          'from robot import Pepper; pepper = Pepper("192.168.0.101"); pepper.start_dance()'],
+                                          'from robot import Pepper; pepper = Pepper("192.168.8.101"); pepper.start_dance()'],
                                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 elif button == "RB":
                     p = subprocess.Popen([sys.executable, '-c',
-                                          'from robot import Pepper; pepper = Pepper("192.168.0.101"); pepper.stop_sound()'],
+                                          'from robot import Pepper; pepper = Pepper("192.168.8.101"); pepper.stop_sound()'],
                                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 elif button == "Left":
                     pepper.hand("right", True)

@@ -26,7 +26,7 @@ menu = ["battery status", "pick a volunteer", "dance", "ask wikipedia", "blink m
 menu_functions = ["pepper.battery_status()", "pepper.pick_a_volunteer()", "pepper.start_dance()",
                   "pepper.ask_wikipedia()", "blink_eyes()", "pepper.tablet_show_web('https://www.ciirc.cvut.cz')",
                   "pepper.tablet_show_image('https://goo.gl/4Xq6Bc')", "pepper.rest()",
-                  "pepper.get_face_properties()", "pepper.say('My name is Cinnamon. I am circ robot. I was designed as social robot by Softbanks robotics. At circ my colegues Gabriela, Michael and Michal develop artificial intelligence on me. They will show you. Luckily.')"]
+                  "pepper.get_face_properties()", "pepper.say('My name is Cinnamon. I am circ robot. I was designed as social robot by Softbanks robotics. At circ my colegues Gabriela, Michael and Michal develop artificial intelligence with me. They will show you. Luckily.')"]
 menu_index = -1
 menu_items = len(menu)
 hat = None

@@ -403,7 +403,7 @@ class RemoteVoice(object):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ip", type=str, default=config.get("DEFAULT", "IP_ADDRESS"),
+    parser.add_argument("--ip", type=str, default=config.IP_ADDRESS,
                         help="Robot IP address. On robot or Local Naoqi: use \
                         '127.0.0.1'.")
     parser.add_argument("--port", type=int, default=9559,

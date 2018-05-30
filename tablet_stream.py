@@ -1,10 +1,7 @@
 from robot import Pepper
-import ConfigParser
+import config
 
-config = ConfigParser.ConfigParser()
-config.read("config.ini")
-
-pepper = Pepper(config.get("DEFAULT", "IP_ADDRESS"))
+pepper = Pepper(config.IP_ADDRESS, config.PORT)
 pepper.share_localhost("/Users/michael/Desktop/Pepper/tmp/")
 pepper.subscribe_camera("camera_top", 2, 30)
 

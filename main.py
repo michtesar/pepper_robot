@@ -1,10 +1,7 @@
 from robot import *
-import ConfigParser
+import config
 
-config = ConfigParser.ConfigParser()
-config.read("config.ini")
-
-pepper = Pepper(config.get("DEFAULT", "IP_ADDRESS"))
+pepper = Pepper(config.IP_ADDRESS, config.PORT)
 
 while True:
     pepper.say("Give me a question")
